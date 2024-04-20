@@ -32,14 +32,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
-      <style>
-         #flash-messages {
-             position: fixed;
-             top: 20px;
-             left: 20px;
-               z-index: 9999;
-         }
-     </style>
    </head>
    <body class="inner_page login">
       <div class="full_container">
@@ -47,42 +39,78 @@
             <div class="center verticle_center full_height">
                <div class="login_section">
                   <div class="logo_login">
-                     <div class="center">
+                     <div class="center" >
                         
                         <img width="30%" src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="#" />
                         
                      </div>
                   </div>
                   <div class="login_form">
-                     <form action="{{ url_for('login') }}"  method="POST">
+                     <form action="{{ url_for('index') }} " method="GET" onsubmit="addKullanici(event)">
                         <fieldset>
                            <h1><b>Sözleşme Takip</b></h1>
+                           <p>Üye olmak için lütfen bilgilerinizi doldurunuz.</p>
                            <br>
+                           <div class="field" >
+                            <label for="isim" class="label_field">İsim</label>
+                            <input type="text" name="isim" id="isim" placeholder="İsim giriniz" required />
+                         </div>
+                         <br>
+                         <div class="field">
+                          <label for="soyisim" class="label_field">Soyisim</label>
+                          <input type="text" name="soyisim" id="soyisim" placeholder="Soyisim giriniz" required/>
+                       </div>
                            <div class="field">
-                             
-                                 {% for message in messages %}
-                                     <div class="flash-message">{{ message }}</div>
-                                 {% endfor %}
-                         
-                              
-                              <label class="label_field">E-Mail Adresi</label>
-                              <input type="email" name="email" placeholder="E-Mail" required/>
+                              <label for="email" class="label_field">E-Mail Adresi</label>
+                              <input type="email" name="email" id="email"  placeholder="E-Mail" required/>
                            </div>
                            <div class="field">
-                              <label class="label_field">Şifre</label>
-                              <input type="password" name="password" placeholder="Şifre" required />
+                              <label  for="password" class="label_field">Şifre</label>
+                              <input type="password" name="password" id="password"  placeholder="Şifre" required />
                            </div>
+                           <div class="field">
+                            <label  for="password_again" class="label_field">Şifre Tekrar</label>
+                            <input type="password" name="password_again" id="password_again"  placeholder="Şifre Tekrar" required />
+                         </div>
                            
-                           <div class="field margin_0" style ="flex-direction:row">
-                              <button type="submit" class="main_bt" style="margin-left: 5%"></a>Giriş Yap</button>
-                              <a href="{{ url_for('uye_ol') }}" class="main_bt">Üye Ol</a>
+                           <div class="field margin_0" style ="flex-direction:row" >
+                            <button type="submit" class="main_bt" onclick="addKullanici()">Üye Ol</button>
                            </div>
-                           
                         </fieldset>
                      </form>
-
-                   
+                     <a href="{{ url_for('index') }}" style ="margin-top:5%" > Hesabın var mı? Giriş Yap</a>
+                  
                   </div>
+                  <script>
+        
+                    function addKullanici(event) {
+                        event.preventDefault(); // Formun otomatik gönderimini engelle
+                        var isim = document.getElementById("isim").value;
+                        var soyisim = document.getElementById("soyisim").value;
+                        var sifre = document.getElementById("password").value;
+                        var email = document.getElementById("email").value;
+                    
+                        fetch("/add-endpoint", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                isim: isim,
+                                soyisim: soyisim,
+                                sifre: sifre,
+                                email: email,
+                            }),
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+                        })
+                        .catch((error) => {
+                            console.error("Hata:", error);
+                        });
+                    }
+                </script>
                   <div class="container-fluid">
                      <div class="footer">
                         <p>Bu platform Emaar Türkiye için geliştirilmiştir.<br><br>
@@ -101,22 +129,16 @@
             
          </div>
       </div>
-      <script>
-         // Sayfa yüklendiğinde flash mesajlarını kontrol et
-         document.addEventListener('DOMContentLoaded', function() {
-             var flashMessages = document.querySelectorAll('.flash-message');
-             flashMessages.forEach(function(message) {
-                 // Her bir flash mesajını 3 saniye sonra otomatik olarak gizle
-                 setTimeout(function() {
-                     message.style.opacity = 0;
-                     message.style.transition = 'opacity 0.5s';
-                     setTimeout(function() {
-                         message.style.display = 'none';
-                     }, 500); // Opaklık animasyonu tamamlanınca mesajı gizle
-                 }, 3000);
-             });
-         });
-     </script>
+      <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center font-18">
+                    <h3 class="mb-20">Üyelik Başarılı!</h3>
+                    Giriş Sayfasına yönlendiriliyorsunuz...
+                </div>
+            </div>
+        </div>
+    </div>
       <!-- jQuery -->
       <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
@@ -132,5 +154,14 @@
       </script>
       <!-- custom js -->
       <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+      <script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/script.min.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/process.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/layout-settings.js') }}"></script>
+	<script src="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/scripts/steps-setting.js') }}"></script>
+    
+
+
    </body>
 </html>

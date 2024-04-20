@@ -579,6 +579,7 @@ a:focus {
 .center {
     display: flex;
     justify-content: center;
+ 
 }
 
 .verticle_center {
@@ -3278,9 +3279,11 @@ table.projects tr td:first-child {
 
 .logo_login {
     background: url('images/layout_img/login_image.jpg');
-    padding: 50px 0;
+    padding: 20% 0;
     background-position: center center;
+    background-size: cover;
     position: relative;
+
 }
 
 .logo_login::after {
