@@ -9,30 +9,25 @@
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
       <title>Sözleşmem Emaar</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
       <!-- site icon -->
       
-      <link rel="apple-touch-icon" sizes="180x180" href="images/logo/banner-img.png">
-	   <link rel="icon" type="image/png" sizes="32x32" href="images/logo/banner-img.png">
-	   <link rel="icon" type="image/png" sizes="16x16" href="images/logo/banner-img.png">
+      <link rel="apple-touch-icon" sizes="180x180"  href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	   <link rel="icon" type="image/png" sizes="32x32"  href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	   <link rel="icon" type="image/png" sizes="16x16"  href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
       <!-- bootstrap css -->
-      <link rel="stylesheet" href="css/bootstrap.min.css" />
-      <!-- site css -->
-      <link rel="stylesheet" href="style.css" />
-      <!-- responsive css -->
-      <link rel="stylesheet" href="css/responsive.css" />
-      <!-- color css -->
-      <link rel="stylesheet" href="css/colors.css" />
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/responsive.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/color_2.css') }}">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
       <!-- select bootstrap -->
-      <link rel="stylesheet" href="css/bootstrap-select.css" />
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-select.css') }}">
       <!-- scrollbar css -->
-      <link rel="stylesheet" href="css/perfect-scrollbar.css" />
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/perfect-scrollbar.css') }}">
       <!-- custom css -->
-      <link rel="stylesheet" href="css/custom.css" />
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}">
       <!-- calendar file css -->
-      <link rel="stylesheet" href="js/semantic.min.css" />
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -46,12 +41,12 @@
                   <div class="logo_login">
                      <div class="center">
                         
-                        <img width="210" src="images/logo/banner-img.png" alt="#" />
+                        <img width="210" src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="#" />
                         
                      </div>
                   </div>
                   <div class="login_form">
-                     <form action="sozlesme-ekle.html">
+                     <form action="{{ url_for('sozlesme_ekle') }}">
                         <fieldset>
                            <h1><b>Sözleşme Takip</b></h1>
                            <br>
@@ -66,11 +61,12 @@
                            </div>
                            
                            <div class="field margin_0">
-                              <label class="label_field hidden">hidden label</label>
-                              <button class="main_bt"></a>Giriş Yap</button>
+                              <label class="label_field hidden"></label>
+                              <button type="submit" class="main_bt"></a>Giriş Yap</button>
                            </div>
                         </fieldset>
                      </form>
+               
                   </div>
                   <div class="container-fluid">
                      <div class="footer">
@@ -83,25 +79,27 @@
                            
                         </p>
                      </div>
-                  </div>
+                  
                </div>
+             
             </div>
+            
          </div>
       </div>
       <!-- jQuery -->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
+      <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
       <!-- wow animation -->
-      <script src="js/animate.js"></script>
+      <script src="{{ url_for('static', filename='js/animate.js') }}"></script>
       <!-- select country -->
-      <script src="js/bootstrap-select.js"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap-select.js') }}"></script>
       <!-- nice scrollbar -->
-      <script src="js/perfect-scrollbar.min.js"></script>
+      <script src="{{ url_for('static', filename='js/perfect-scrollbar.min.js') }}"></script>
       <script>
          var ps = new PerfectScrollbar('#sidebar');
       </script>
       <!-- custom js -->
-      <script src="js/custom.js"></script>
+      <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
    </body>
 </html>

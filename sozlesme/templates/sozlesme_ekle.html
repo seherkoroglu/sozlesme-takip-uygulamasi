@@ -6,9 +6,9 @@
 	<title>Sözleşmem Emaar</title>
 
 	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="images/logo/banner-img.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="images/logo/banner-img.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="images/logo/banner-img.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,10 +16,10 @@
 	<!-- Google Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="src/plugins/jquery-steps/jquery.steps.css">
-	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/core.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/icon-font.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/style.css') }}">
 
 
 	
@@ -45,13 +45,13 @@
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="images/logo/banner-img.png" alt="">
+							<img src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="">
 						</span>
 						<span class="user-name">Emaar Türkiye</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						
-						<a class="dropdown-item" href="index.html"><i class="dw dw-logout"></i> Çıkış Yap</a>
+						<a class="dropdown-item" href="{{ url_for('index') }}"><i class="dw dw-logout"></i> Çıkış Yap</a>
 					</div>
 				</div>
 			</div>
@@ -65,8 +65,8 @@
 	<div class="left-side-bar">
 		<div class="brand-logo">
 			<a href=""> 
-				<img src="images/logo/emaarlogo.JPG" alt="" class="dark-logo">
-				<img src="images/logo/emaarlogo.JPG" alt="" class="light-logo">
+				<img src="{{ url_for('static', filename='images/logo/emaarlogo.JPG') }}" alt="" class="dark-logo">
+				<img src="{{ url_for('static', filename='images/logo/emaarlogo.JPG') }}" alt="" class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
@@ -109,7 +109,7 @@
 						<p class="mb-30"></p>
 					</div>
 					<div class="wizard-content">
-						<form class="tab-wizard wizard-circle wizard">
+						<form class="tab-wizard wizard-circle wizard" action="{{ url_for('sozlesme_ekle') }}" method="POST">
 							<h5></h5>
 							<section>
 								<div class="row">
@@ -325,7 +325,7 @@
 						<div class="modal-content">
 							<div class="modal-body text-center font-18">
 								<h3 class="mb-20">Sözleşme Eklendi!</h3>
-								<div class="mb-30 text-center"><img src="vendors/images/success.png"></div>
+								<div class="mb-30 text-center"><img src="{{ url_for('static', filename='vendors/images/success.png') }}"></div>
 								Sözleşmeye ait detaylar başarılı bir şekilde eklenmiştir.
 							</div>
 							<div class="modal-footer justify-content-center">
@@ -346,11 +346,11 @@
 		</div>
 	</div>
 	<!-- js -->
-	<script src="vendors/scripts/core.js"></script>
-	<script src="vendors/scripts/script.min.js"></script>
-	<script src="vendors/scripts/process.js"></script>
-	<script src="vendors/scripts/layout-settings.js"></script>
-	<script src="src/plugins/jquery-steps/jquery.steps.js"></script>
-	<script src="vendors/scripts/steps-setting.js"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/script.min.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/process.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/layout-settings.js') }}"></script>
+	<script src="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/scripts/steps-setting.js') }}"></script>
 </body>
 </html>
