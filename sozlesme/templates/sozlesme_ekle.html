@@ -78,7 +78,7 @@
 					
 					<li class="dropdown">
 						
-						<a href="javascript:;" class="dropdown-toggle">
+						<a href="sozlesme_ekle" class="dropdown-toggle">
 							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşme Detayları</span></i>
 							
 						</a>
@@ -86,7 +86,7 @@
 							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşmelerim</span></i>
 							
 						</a>
-						<a href="javascript:;" class="dropdown-toggle">
+						<a href="hesabim.html" class="dropdown-toggle">
 							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Hesabım</span></i>
 							
 						</a>
@@ -123,17 +123,21 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label >Firma Adı:</label>
-											<select class="custom-select form-control">
+											<label for="firma_adi" >Firma Adı:</label>
+											<select name="firma_adi" id="firma_adi" class="custom-select form-control">
 												<option value="">Seç</option>
-												<option value="">ELGG</option>
+												<option value="ELGG">ELGG</option>
+												<option value="Arçelik">Arçelik</option>
+												<option value="Beko">Beko</option>
+												<option value="Samsung">Samsung</option>
+												<option value="Vestel">Vestel</option>
 											</select>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Telefon Numarası :</label>
-											<input type="text" class="form-control">
+											<label for="telefon">Telefon Numarası :</label>
+											<input name="telefon" id="telefon" type="text" class="form-control">
 											
 										</div>
 									</div>
@@ -142,27 +146,27 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label >Departman Adı :</label>
-											<select class="custom-select form-control">
+											<label for="departman_adi" >Departman Adı :</label>
+											<select name="departman_adi" id="departman_adi" class="custom-select form-control">
 												<option value="">Seç</option>
-												<option value="">HR</option>
-												<option value="">IT</option>
-												<option value="">Legal</option>
-												<option value="">Purchasing</option>
-												<option value="">Accounting</option>
-												<option value="">Finance</option>
-												<option value="">Retail Relations</option>
-												<option value="">Facility Management</option>
-												<option value="">Mall Marketing</option>
-												<option value="">Mall Management</option>
-												<option value="">Leasing</option>
-												<option value="">RDT</option>
-												<option value="">Customer Care</option>
-												<option value="">LCCM</option>
-												<option value="">Project & Development</option>
-												<option value="">Sales</option>
-												<option value="">Aquarium</option>
-												<option value="">Skyview</option>
+												<option value="HR">HR</option>
+												<option value="IT">IT</option>
+												<option value="Legal">Legal</option>
+												<option value="Purchasing">Purchasing</option>
+												<option value="Accounting">Accounting</option>
+												<option value="Finance">Finance</option>
+												<option value="Retail Relations">Retail Relations</option>
+												<option value="Facility Management">Facility Management</option>
+												<option value="Mall Marketing">Mall Marketing</option>
+												<option value="Mall Management">Mall Management</option>
+												<option value="Leasing">Leasing</option>
+												<option value="RDT">RDT</option>
+												<option value="Customer Care">Customer Care</option>
+												<option value="LCCM">LCCM</option>
+												<option value="Project & Development">Project & Development</option>
+												<option value="Sales">Sales</option>
+												<option value="Aquarium">Aquarium</option>
+												<option value="Skyview">Skyview</option>
 
 
 											</select>
@@ -171,23 +175,23 @@
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Departman E-Mail Adresi :</label>
-											<input type="email" class="form-control">
+											<label for="departman_email">Departman E-Mail Adresi :</label>
+											<input  name="departman_email" id="departman_email" type="email" class="form-control">
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Yetkili Kişi :</label>
-											<input type="text" class="form-control">
+											<label for="firma_yetkilisi">Yetkili Kişi :</label>
+											<input name="firma_yetkilisi" id="firma_yetkilisi" type="text" class="form-control">
 											
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Yetkili Kişi E-Mail Adresi :</label>
-											<input type="text" class="form-control">
+											<label for="firma_yetkilisi_email" >Yetkili Kişi E-Mail Adresi :</label>
+											<input name="firma_yetkilisi_email" id="firma_yetkilisi_email" type="text" class="form-control">
 										</div>
 									</div>
 									
@@ -195,14 +199,14 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label >Sözleşme Başlangıç Tarihi :</label>
-											<input type="text" class="form-control date-picker" placeholder="Seç">
+											<label for="baslangic_tarihi" >Sözleşme Başlangıç Tarihi :</label>
+											<input name="baslangic_tarihi" id="baslangic_tarihi" type="text" class="form-control date-picker" placeholder="Seç">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label >Sözleşme Bitiş Tarihi :</label>
-											<input type="text" class="form-control date-picker" placeholder="Seç">
+											<label for="bitis_tarihi" >Sözleşme Bitiş Tarihi :</label>
+											<input name="bitis_tarihi" id="bitis_tarihi" type="text" class="form-control date-picker" placeholder="Seç">
 										</div>
 									</div>
 								</div>
@@ -213,44 +217,44 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Sözleşme Başlığı :</label>
-											<input type="text" class="form-control">
+											<label for="sozlesme_basligi">Sözleşme Başlığı :</label>
+											<input name="sozlesme_basligi" id="sozlesme_basligi" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>İlgili Firma Adı :</label>
-											<input type="text" class="form-control">
+											<label for="ilgili_firma_adi">İlgili Firma Adı :</label>
+											<input name="ilgili_firma_adi" id="ilgili_firma_adi" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>İlgili Firma Telefon Numarası:</label>
-											<input type="text" class="form-control">
+											<label for="ilgili_firma_telefon">İlgili Firma Telefon Numarası:</label>
+											<input name="ilgili_firma_telefon" id="ilgili_firma_telefon" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>İlgili Firma E-Mail Adresi :</label>
-											<input type="text" class="form-control">
+											<label for="ilgili_firma_email">İlgili Firma E-Mail Adresi :</label>
+											<input name="ilgili_firma_email" id="ilgili_firma_email" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>İlgili Firma Yetkili Kişi:</label>
-											<input type="text" class="form-control">
+											<label for="ilgili_firma_yetkilisi">İlgili Firma Yetkili Kişi:</label>
+											<input name="ilgili_firma_yetkilisi" id="ilgili_firma_yetkilisi" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>İlgili Firma Yetkili Kişi E-Mail Adresi :</label>
-											<input type="text" class="form-control">
+											<label for="ilgili_firma_yetkilisi_email">İlgili Firma Yetkili Kişi E-Mail Adresi :</label>
+											<input name="ilgili_firma_yetkilisi_email" id="ilgili_firma_yetkilisi_email"  type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-12">
 										<div class="form-group">
-											<label>Sözleşme İçeriği :</label>
-											<textarea class="form-control"></textarea>
+											<label for="sozlesme_icerigi">Sözleşme İçeriği :</label>
+											<textarea id="sozlesme_icerigi" name="sozlesme_icerigi" class="form-control"></textarea>
 										</div>
 									</div>
 								</div>
@@ -261,35 +265,33 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Bilgilendirme Amacı :</label>
+											<label for="bilgilendirme_amaci">Bilgilendirme Amacı :</label>
 											
-											<select class="form-control">
+											<select name= "bilgilendirme_amaci" id="bilgilendirme_amaci" class="form-control">
 												<option value="">Seç</option>
-												<option>Hatırlatma</option>
-												
-												
+												<option value="Hatirlatma">Hatırlatma</option>
 											</select>
 											
 										</div>
 										<div class="form-group">
-											<label>Bilgilendirme Tipi :</label>
+											<label for="bilgilendirme_tipi">Bilgilendirme Tipi :</label>
 											
-											<select class="form-control">
+											<select name="bilgilendirme_tipi" id="bilgilendirme_tipi" class="form-control">
 												<option value="">Seç</option>
-												<option>Haftalık</option>
-												<option>Aylık</option>
+												<option value="Haftalık">Haftalık</option>
+												<option value="Aylık">Aylık</option>
 												
 											</select>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Bilgilendirme Tarihi :</label>
-											<input type="text" class="form-control date-picker" placeholder="Seç">
+											<label for="bilgilendirme_tarihi">Bilgilendirme Tarihi :</label>
+											<input name="bilgilendirme_tarihi" id="bilgilendirme_tarihi" type="text" class="form-control date-picker" placeholder="Seç">
 										</div>
 										<div class="form-group">
-											<label>Bilgilendirme Saati  :</label>
-											<input class="form-control time-picker" placeholder="Select time" type="text">
+											<label for="bilgilendirme_saati">Bilgilendirme Saati  :</label>
+											<input name="bilgilendirme_saati" id="bilgilendirme_saati" class="form-control time-picker" placeholder="Select time" type="text">
 										</div>
 									</div>
 								</div>
@@ -300,23 +302,23 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Sözleşme Kodu :</label>
-											<input type="text" class="form-control">
+											<label for="sozlesme_kodu">Sözleşme Kodu :</label>
+											<input name="sozlesme_kodu" id="sozlesme_kodu"  type="text" class="form-control">
 										</div>
 										
 										<div class="form-group">
-											<label>İmza Yetkilisi</label>
-											<select class="form-control">
-												<option>Seç</option>
-												<option>CFO</option>
-												<option>Mall GM</option>
+											<label for="imza_yetkilisi">İmza Yetkilisi</label>
+											<select name="imza_yetkilisi" id="imza_yetkilisi" class="form-control">
+												<option value="">Seç</option>
+												<option value="CFO" >CFO</option>
+												<option value="Mall GM">Mall GM</option>
 											</select>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
-											<label>Açıklama</label>
-											<textarea class="form-control"></textarea>
+											<label for="aciklama">Açıklama</label>
+											<textarea name="aciklama" id="aciklama" class="form-control"></textarea>
 										</div>
 									</div>
 								</div>
@@ -324,6 +326,77 @@
 						</form>
 					</div>
 				</div>
+				
+				<script>
+					function addSozlesme(event) {
+						event.preventDefault(); // Formun otomatik gönderimini engelle
+						// Formdaki gerekli alanlardan verileri al
+						var sozlesme_basligi = document.getElementById("sozlesme_basligi").value;
+						var sozlesme_icerigi = document.getElementById("sozlesme_icerigi").value;
+						var baslangic_tarihi = document.getElementById("baslangic_tarihi").value;
+						var bitis_tarihi = document.getElementById("bitis_tarihi").value;
+						var bilgilendirme_amaci = document.getElementById("bilgilendirme_amaci").value;
+						var bilgilendirme_tipi = document.getElementById("bilgilendirme_tipi").value;
+						var bilgilendirme_tarihi = document.getElementById("bilgilendirme_tarihi").value;
+						var bilgilendirme_saati = document.getElementById("bilgilendirme_saati").value;
+						var sozlesme_kodu = document.getElementById("sozlesme_kodu").value;
+						var imza_yetkilisi = document.getElementById("imza_yetkilisi").value;
+						var aciklama = document.getElementById("aciklama").value;
+						var firma_adi = document.getElementById("firma_adi").value;
+						var telefon = document.getElementById("telefon").value;
+						var firma_yetkilisi = document.getElementById("firma_yetkilisi").value;
+						var firma_yetkilisi_email = document.getElementById("firma_yetkilisi_email").value;
+						var ilgili_firma_adi = document.getElementById("ilgili_firma_adi").value;
+						var ilgili_firma_telefon = document.getElementById("ilgili_firma_telefon").value;
+						var ilgili_firma_email = document.getElementById("ilgili_firma_email").value;
+						var ilgili_firma_yetkilisi = document.getElementById("ilgili_firma_yetkilisi").value;
+						var ilgili_firma_yetkilisi_email = document.getElementById("ilgili_firma_yetkilisi_email").value;
+						var departman_adi = document.getElementById("departman_adi").value;
+						var departman_email = document.getElementById("departman_email").value;
+				
+						// Sunucuya POST isteği yap
+						fetch("/add-sozlesme", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								sozlesme_basligi: sozlesme_basligi,
+								sozlesme_icerigi:sozlesme_icerigi,
+								baslangic_tarihi:baslangic_tarihi,
+								bitis_tarihi:bitis_tarihi,
+								bilgilendirme_amaci:bilgilendirme_amaci,
+								bilgilendirme_tipi:bilgilendirme_tipi,
+								bilgilendirme_tarihi:bilgilendirme_tarihi,
+								bilgilendirme_saati:bilgilendirme_saati,
+								sozlesme_kodu:sozlesme_kodu,
+								imza_yetkilisi:imza_yetkilisi,
+								aciklama:aciklama,
+								firma_adi:firma_adi,
+								telefon:telefon,
+								firma_yetkilisi:firma_yetkilisi,
+								firma_yetkilisi_email:firma_yetkilisi_email,
+								ilgili_firma_adi:ilgili_firma_adi,
+								ilgili_firma_telefon:ilgili_firma_telefon,
+								ilgili_firma_email:ilgili_firma_email,
+								ilgili_firma_yetkilisi:ilgili_firma_yetkilisi,
+								ilgili_firma_yetkilisi_email:ilgili_firma_yetkilisi_email,
+								departman_adi:departman_adi,
+								departman_email:departman_email
+								
+							}),
+						})
+						.then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+                        })
+                        .catch((error) => {
+                            console.error("Hata:", error);
+                        });
+                    
+					}
+				</script>
+				
 
 				
 
@@ -337,8 +410,11 @@
 								Sözleşmeye ait detaylar başarılı bir şekilde eklenmiştir.
 							</div>
 							<div class="modal-footer justify-content-center">
-								<button type="button" class="btn btn-primary" data-dismiss="modal">Tamamlandı!</button>
+								<a href="sozlesme_ekle"
+									 type="submit" class="btn btn-primary">Tamamlandı!
+								</a>
 							</div>
+							
 						</div>
 					</div>
 				</div>

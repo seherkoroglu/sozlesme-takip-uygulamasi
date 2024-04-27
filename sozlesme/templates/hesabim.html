@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Basic Page Info -->
+	<meta charset="utf-8">
+	<title>Sözleşmem Emaar</title>
+
+	<!-- Site favicon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/logo/banner-img.png') }}">
+
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/core.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/icon-font.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/style.css') }}">
+
+
+	
+</head>
+<body>
+	
+
+	<div class="header">
+		
+		<div class="header-left">
+			
+			<div class="menu-icon dw dw-menu">
+				
+			</div>
+			<!--<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>-->
+			<div class="header-search">
+				<h5>Sözleşme Takip </h5>
+				
+			</div>
+		</div>
+		
+			<div class="user-info-dropdown">
+				<div class="dropdown">
+					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+						<span class="user-icon">
+							<img src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="">
+						</span>
+						<span class="user-name">Emaar Türkiye</span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+						
+						<a class="dropdown-item" href="{{ url_for('index') }}"><i class="dw dw-logout"></i> Çıkış Yap</a>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	
+	
+
+	<div class="left-side-bar">
+		<div class="brand-logo">
+			<a href=""> 
+				<img src="{{ url_for('static', filename='images/logo/emaarlogo.JPG') }}" alt="" class="dark-logo">
+				<img src="{{ url_for('static', filename='images/logo/emaarlogo.JPG') }}" alt="" class="light-logo">
+			</a>
+			<div class="close-sidebar" data-toggle="left-sidebar-close">
+				<i class="ion-close-round"></i>
+			</div>
+		</div>
+		<div class="menu-block customscroll">
+			<div class="sidebar-menu">
+				<ul id="accordion-menu">
+					
+					<li class="dropdown">
+						
+						<a href="sozlesme_ekle" class="dropdown-toggle">
+							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşme Detayları</span></i>
+							
+						</a>
+						<a href="javascript:;" class="dropdown-toggle">
+							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşmelerim</span></i>
+							
+						</a>
+						<a href="hesabim.html" class="dropdown-toggle">
+							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Hesabım</span></i>
+							
+						</a>
+						<!--<ul class="submenu">
+							<li></li>
+							<li></li>
+							
+							
+						</ul>-->
+					</li>
+					
+					
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="mobile-menu-overlay"></div>
+
+	<div class="main-container">
+		<div class="pd-ltr-20 xs-pd-20-10">
+			<div class="min-height-200px">
+				
+
+				<div class="pd-20 card-box mb-30">
+					<div class="clearfix">
+						<h4 class="text-blue h4">Hesap Ayarları</h4>
+						<p class="mb-30"></p>
+					</div>
+					<div class="wizard-content">
+						<form class="hesap wizard-circle wizard" action="{{ url_for('hesabim') }}" method="POST">
+							<h5></h5>
+							<section>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="isim" >Kullanıcı Adı ve Soyadı:</label>
+											<input type="text" class="form-control" id="isim" value="{{ session['username'] }}" readonly>
+                                            <input type="text" class="form-control" id="soyisim" value="{{ session['soyisim'] }}" readonly>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="email">E-mail :</label>
+											<input type="text" id="email" class="form-control"  value="{{ session['email'] }}" readonly>
+											
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="sifre">Şifre:</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="sifre" value="{{ session['sifre'] }}" readonly>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="toggle-password">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column new-password-fields" style="display: none;">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="new_password">Yeni Şifre:</label>
+                                            <input type="password" class="form-control" id="new_password" required>
+                                        </div>
+                                    </div>
+                                
+                                <div class="column new-password-fields">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="confirm_password">Yeni Şifre Tekrar:</label>
+                                            <input type="password" class="form-control" id="confirm_password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-primary" id="sifreDegistir">Şifreyi Değiştir</button>
+                                    </div>
+                                </div>
+                                <script>
+                                    $(document).ready(function(){
+                                        $("#toggle-password").click(function(){
+                                            var passwordField = $("#sifre");
+                                            var passwordFieldType = passwordField.attr('type');
+                                            if(passwordFieldType == 'password') {
+                                                passwordField.attr('type', 'text');
+                                                $("#toggle-password i").removeClass("fa-eye").addClass("fa-eye-slash");
+                                            } else {
+                                                passwordField.attr('type', 'password');
+                                                $("#toggle-password i").removeClass("fa-eye-slash").addClass("fa-eye");
+                                            }
+                                        });
+                                    });
+                                </script>
+							<!-- Step 2 -->
+							<h5></h5>
+							
+								
+								</div>
+							</section>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-wrap pd-20 mb-20 card-box">
+                Bu platform Emaar Türkiye için geliştirilmiştir. </a> <br>
+                <a href="https://www.facebook.com/EmaarTurkey/?locale=tr_TR"><i class="fa fa-facebook"></i></a>
+                <a href="https://twitter.com/EmaarTurkey"><i class="fa fa-twitter"></i></a>
+                <a href="https://www.instagram.com/emaarturkey/"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/user/EmaarTurkey"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    
+    </div>
+
+</div>
+
+	<!-- js -->
+	<script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/script.min.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/process.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/layout-settings.js') }}"></script>
+	<script src="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/scripts/steps-setting.js') }}"></script>
+</body>
+</html>

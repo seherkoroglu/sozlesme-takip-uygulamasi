@@ -46,7 +46,7 @@
                      </div>
                   </div>
                   <div class="login_form">
-                     <form action="{{ url_for('index') }} " method="GET" onsubmit="addKullanici(event)">
+                     <form action="{{ url_for('uye_ol') }} " method="GET" onsubmit="addKullanici(event)">
                         <fieldset>
                            <h1><b>Sözleşme Takip</b></h1>
                            <p>Üye olmak için lütfen bilgilerinizi doldurunuz.</p>
@@ -74,7 +74,7 @@
                          </div>
                            
                            <div class="field margin_0" style ="flex-direction:row" >
-                            <button type="submit" class="main_bt" onclick="addKullanici()">Üye Ol</button>
+                            <button type="submit" class="main_bt" onclick="addKullanici(event)">Üye Ol</button>
                            </div>
                         </fieldset>
                      </form>
@@ -105,6 +105,11 @@
                         .then((response) => response.json())
                         .then((data) => {
                             console.log(data);
+                            $('#success-modal').modal('show');
+                            // Belirli bir süre sonra giriş sayfasına yönlendir
+                            setTimeout(function() {
+                                window.location.href = "{{ url_for('index') }}";
+                            }, 3000); // 3 saniye sonra yönlendirme yapılacak
                         })
                         .catch((error) => {
                             console.error("Hata:", error);
