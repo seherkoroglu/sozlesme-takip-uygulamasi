@@ -34,7 +34,7 @@ $(".tab-wizard").steps({
 
 	onFinished: function (event, currentIndex) {
 		$('#success-modal').modal('show');
-		onclick = addSozlesme();
+		onclick = addSozlesme(event);
         
 	}
 });

@@ -113,82 +113,39 @@
 
 				<div class="pd-20 card-box mb-30">
 					<div class="clearfix">
-						<h4 class="text-blue h4">Hesap Ayarları</h4>
+						<h4 class="text-blue h4">Sözleşmelerim</h4>
 						<p class="mb-30"></p>
 					</div>
 					<div class="wizard-content">
-						<form class="hesap wizard-circle wizard" action="{{ url_for('hesabim') }}" method="POST">
-							<h5></h5>
+						<form class="hesap wizard-circle wizard" action="{{ url_for('sozlesmelerim') }}" method="POST">
+							
 							<section>
-								<div class="row">
+								<div class="column">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label for="isim" >Kullanıcı Adı ve Soyadı:</label>
-											<input type="text" class="form-control" id="isim" value="{{ session['username'] }}" readonly>
+											<label for="isim" >Kullanıcı bilgileri</label>
+                                            <input type="text" class="form-control" id="isim" value="{{ session['username'] }}" readonly>
                                             <input type="text" class="form-control" id="soyisim" value="{{ session['soyisim'] }}" readonly>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="email">E-mail :</label>
-											<input type="text" id="email" class="form-control"  value="{{ session['email'] }}" readonly>
+                                            
 											
-										</div>
 									</div>
-									
 								</div>
-								<div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="sifre">Şifre:</label>
-                                            <div class="input-group">
-                                                <input type="password" class="form-control" id="sifre" value="{{ session['sifre'] }}" readonly>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="toggle-password">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                                    </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column new-password-fields" style="display: none;">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="new_password">Yeni Şifre:</label>
-                                            <input type="password" class="form-control" id="new_password" required>
-                                        </div>
-                                    </div>
+                               
+                                <h1>Sözleşme Detayı</h1>
+                               
                                 
-                                <div class="column new-password-fields">
+                                <p><a href="sozlesme_ekle">Ana Sayfa</a></p>
+       
+                                </div>
+                               <br><br>
+                                <div class="column">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="confirm_password">Yeni Şifre Tekrar:</label>
-                                            <input type="password" class="form-control" id="confirm_password" required>
-                                        </div>
+                                        <button type="button" class="btn btn-primary" id="emailGönder">Taraflara E-Mail Gönder</button>
                                     </div>
                                 </div>
-                            </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <button type="button" class="btn btn-primary" id="sifreDegistir">Şifreyi Değiştir</button>
-                                    </div>
-                                </div>
-                                <script>
-                                    $(document).ready(function(){
-                                        $("#toggle-password").click(function(){
-                                            var passwordField = $("#sifre");
-                                            var passwordFieldType = passwordField.attr('type');
-                                            if(passwordFieldType == 'password') {
-                                                passwordField.attr('type', 'text');
-                                                $("#toggle-password i").removeClass("fa-eye").addClass("fa-eye-slash");
-                                            } else {
-                                                passwordField.attr('type', 'password');
-                                                $("#toggle-password i").removeClass("fa-eye-slash").addClass("fa-eye");
-                                            }
-                                        });
-                                    });
-                                </script>
+                               
 							<!-- Step 2 -->
-							<h5></h5>
+							
 							
 								
 								</div>

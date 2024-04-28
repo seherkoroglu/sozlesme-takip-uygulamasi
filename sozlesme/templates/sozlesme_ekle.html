@@ -82,7 +82,7 @@
 							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşme Detayları</span></i>
 							
 						</a>
-						<a href="javascript:;" class="dropdown-toggle">
+						<a href="sozlesmelerim" class="dropdown-toggle">
 							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşmelerim</span></i>
 							
 						</a>
@@ -117,7 +117,7 @@
 						<p class="mb-30"></p>
 					</div>
 					<div class="wizard-content">
-						<form class="tab-wizard wizard-circle wizard" action="{{ url_for('sozlesme_ekle') }}" method="POST">
+						<form class="tab-wizard wizard-circle wizard" action="{{ url_for('sozlesme_ekle') }}" method="POST" onsubmit="addSozlesme(event)">
 							<h5></h5>
 							<section>
 								<div class="row">
@@ -176,7 +176,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="departman_email">Departman E-Mail Adresi :</label>
-											<input  name="departman_email" id="departman_email" type="email" class="form-control">
+											<input  name="departman_email" id="departman_email" type="text" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -200,13 +200,13 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="baslangic_tarihi" >Sözleşme Başlangıç Tarihi :</label>
-											<input name="baslangic_tarihi" id="baslangic_tarihi" type="text" class="form-control date-picker" placeholder="Seç">
+											<input name="baslangic_tarihi" id="baslangic_tarihi" type="text" class="form-control date-picker">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="bitis_tarihi" >Sözleşme Bitiş Tarihi :</label>
-											<input name="bitis_tarihi" id="bitis_tarihi" type="text" class="form-control date-picker" placeholder="Seç">
+											<input name="bitis_tarihi" id="bitis_tarihi" type="text" class="form-control date-picker">
 										</div>
 									</div>
 								</div>
@@ -318,7 +318,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="aciklama">Açıklama</label>
-											<textarea name="aciklama" id="aciklama" class="form-control"></textarea>
+											<textarea name="aciklama" id="aciklama" class="form-control" type="text"></textarea>
 										</div>
 									</div>
 								</div>
@@ -361,7 +361,7 @@
 								"Content-Type": "application/json",
 							},
 							body: JSON.stringify({
-								sozlesme_basligi: sozlesme_basligi,
+								sozlesme_basligi:sozlesme_basligi,
 								sozlesme_icerigi:sozlesme_icerigi,
 								baslangic_tarihi:baslangic_tarihi,
 								bitis_tarihi:bitis_tarihi,
