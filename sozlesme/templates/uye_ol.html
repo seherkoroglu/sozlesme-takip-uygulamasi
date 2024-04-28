@@ -49,36 +49,38 @@
                      <form action="{{ url_for('uye_ol') }} " method="GET" onsubmit="addKullanici(event)">
                         <fieldset>
                            <h1><b>Sözleşme Takip</b></h1>
-                           <p>Üye olmak için lütfen bilgilerinizi doldurunuz.</p>
+				<br>
+                           <p>Üye olmak için lütfen bilgilerinizi giriniz.</p>
                            <br>
                            <div class="field" >
                             <label for="isim" class="label_field">İsim</label>
-                            <input type="text" name="isim" id="isim" placeholder="İsim giriniz" required />
+                            <input type="text" name="isim" id="isim" placeholder="" required />
                          </div>
-                         <br>
+                         
                          <div class="field">
                           <label for="soyisim" class="label_field">Soyisim</label>
-                          <input type="text" name="soyisim" id="soyisim" placeholder="Soyisim giriniz" required/>
+                          <input type="text" name="soyisim" id="soyisim" placeholder="" required/>
                        </div>
                            <div class="field">
                               <label for="email" class="label_field">E-Mail Adresi</label>
-                              <input type="email" name="email" id="email"  placeholder="E-Mail" required/>
+                              <input type="email" name="email" id="email"  placeholder="" required/>
                            </div>
                            <div class="field">
                               <label  for="password" class="label_field">Şifre</label>
-                              <input type="password" name="password" id="password"  placeholder="Şifre" required />
+                              <input type="password" name="password" id="password"  placeholder="" required />
                            </div>
                            <div class="field">
-                            <label  for="password_again" class="label_field">Şifre Tekrar</label>
-                            <input type="password" name="password_again" id="password_again"  placeholder="Şifre Tekrar" required />
+                            <label  for="password_again" class="label_field">Şifre Tekrar</label> 
+                            <input type="password" name="password_again" id="password_again"  placeholder="" required />
                          </div>
                            
                            <div class="field margin_0" style ="flex-direction:row" >
                             <button type="submit" class="main_bt" onclick="addKullanici(event)">Üye Ol</button>
+				   <br>
                            </div>
                         </fieldset>
                      </form>
-                     <a href="{{ url_for('index') }}" style ="margin-top:5%" > Hesabın var mı? Giriş Yap</a>
+                     <a href="{{ url_for('index') }}" style ="margin-top:5%" > Hesabın var mı?    Giriş Yap</a>
                   
                   </div>
                   <script>
@@ -139,7 +141,7 @@
             <div class="modal-content">
                 <div class="modal-body text-center font-18">
                     <h3 class="mb-20">Üyelik Başarılı!</h3>
-                    Giriş Sayfasına yönlendiriliyorsunuz...
+                    Giriş Sayfasına Yönlendiriliyorsunuz...
                 </div>
             </div>
         </div>
