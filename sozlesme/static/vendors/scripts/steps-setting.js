@@ -142,3 +142,81 @@ $(".hesap").ready(function() {
         });
     });
 });
+
+
+$(document).ready(function() {
+    function getData() {
+        $.ajax({
+            type: 'GET',
+            url: '/get_data',
+            success: function(response) {
+                console.log(response);
+                var formContent = $('#formContent');
+                var table = $('<div class="table-responsive"></div>');
+                var tableInner = '<table class="table table-bordered">';
+                var tableHeader = '<thead><tr><th></th>'; // Boş başlık sütunu eklendi
+                
+                // Tablo başlıklarını oluştur
+                $.each(response[0], function(key, value) {
+                    tableHeader += '<th>' + key + '</th>';
+                });
+                tableHeader += '</tr></thead>';
+                tableInner += tableHeader;
+                
+                // Verileri tabloya ekle
+                $.each(response, function(index, contract) {
+                    var row = '<tr>';
+                    row += '<td><input type="checkbox" class="contractCheckbox" value="' + contract.sozlesme_id + '"></td>'; // Checkbox ekle
+                    $.each(contract, function(key, value) {
+                        row += '<td>' + value + '</td>';
+                    });
+                    row += '</tr>';
+                    tableInner += row;
+                });
+                
+                tableInner += '</table>';
+                table.append(tableInner);
+                
+                // Form içine tabloyu ekle
+                formContent.append(table);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    // Verileri al
+    getData();
+
+    // Sözleşme silme işlemi
+    $('#deleteButton').on('click', function() {
+        var selectedContractIds = $('.contractCheckbox:checked').map(function() {
+            return $(this).val();
+        }).get();
+        
+        if (selectedContractIds.length > 0) {
+            if (confirm('Seçilen sözleşmeleri silmek istediğinizden emin misiniz?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/delete_contract',
+                    data: { sozlesme_ids: selectedContractIds },
+                    traditional: true, // PHP tarafında dizi olarak almak için gerekli
+                    success: function(response) {
+                        // Sözleşmeler başarıyla silindiğinde, tablodan kaldır
+                        $.each(selectedContractIds, function(index, contractId) {
+                            $('#formContent input[value="' + contractId + '"]').closest('tr').remove();
+                        });
+                        alert('Sözleşmeler başarıyla silindi.');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Sözleşmeler silinirken bir hata oluştu.');
+                    }
+                });
+            }
+        } else {
+            alert('Lütfen silmek istediğiniz sözleşmeleri seçin.');
+        }
+    });
+});

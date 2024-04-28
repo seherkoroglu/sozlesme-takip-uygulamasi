@@ -112,6 +112,7 @@ def login():
             session['soyisim'] = user[4]
             session['email'] = user[2]
             session['sifre'] = user[1]
+            session['kullanici_id'] = user[0]
             
             kullanici_id = user[0]
             print("Giriş yapan kullanıcının ID'si:", kullanici_id)
@@ -346,9 +347,6 @@ def save_sozlesme():
         return jsonify({"message": "Sözleşme eklenirken bir hata oluştu"}), 500
 
     
-    
-    
-    
 def delete_user(email):
     try:
         connection = connect()
@@ -413,9 +411,78 @@ def change_password():
         # Hata durumunda yanıt gönder
         return jsonify({"message": "Şifre değiştirme sırasında bir hata oluştu."}), 500
     
+    
+
+
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    try:
+         connection = connect()
+    
+        
+         if connection.is_connected():
+            print("Connected to MySQL database")
+            
+            # Kullanıcı ID'sini al
+            kullanici_id = session.get('kullanici_id')
+            # Veritabanından verileri al
+            cursor = connection.cursor(dictionary=True)
+            query = """
+            SELECT s.sozlesme_id, s.kullanici_id, f.firma_adi, d.departman_adi, il.ilgili_firma_adi, 
+        s.sozlesme_basligi, s.sozlesme_icerigi, s.sozlesme_kodu, s.imza_yetkilisi, s.aciklama, 
+        sb.baslangic_tarihi, sb.bitis_tarihi, sb.bilgilendirme_amaci, sb.bilgilendirme_tipi, 
+        sb.bilgilendirme_tarihi, sb.bilgilendirme_saati
+        FROM sozlesme s
+        LEFT JOIN firma f ON s.firma_id = f.firma_id
+        LEFT JOIN departman d ON s.departman_id = d.departman_id
+        LEFT JOIN ilgili_firma il ON s.ilgili_firma_id = il.ilgili_firma_id
+        LEFT JOIN sozlesme_bilgileri sb ON s.sozlesme_id = sb.sozlesme_id
+        WHERE s.kullanici_id = %s
+            """
+            cursor.execute(query, (kullanici_id,))
+            data = cursor.fetchall()  # Tüm sözleşmeleri almak için fetchall() kullan
+            return jsonify(data)
+        
+        
+    except Exception as e:
+        print("Error getting data from MySQL database:", e)
+        return jsonify({'error': str(e)}), 500
+    
+    
+    
+from flask import request, jsonify
+from flask import request, jsonify
+
+@app.route('/delete_contract', methods=['POST'])
+def delete_contract():
+    try:
+        # İstekten sözleşme ID'sini al
+        contract_id = request.form.get('sozlesme_id')
+        
+        # Sözleşmeyi sozlesme tablosundan sil
+        connection = connect()
+        cursor = connection.cursor()
+        delete_query = "DELETE FROM sozlesme WHERE sozlesme_id = %s"
+        cursor.execute(delete_query, (contract_id,))
+        
+        # Sözleşmeyi sozlesme_bilgileri tablosundan da sil
+        delete_query = "DELETE FROM sozlesme_bilgileri WHERE sozlesme_id = %s"
+        cursor.execute(delete_query, (contract_id,))
+        
+        connection.commit()
+        
+        return jsonify({'message': 'Sözleşme başarıyla silindi.'}), 200
+    except Exception as e:
+        return jsonify({'error': 'Sözleşme silinirken bir hata oluştu: ' + str(e)}), 500
+
+
+
+
+            
+        
+    
 
     
     
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) 
