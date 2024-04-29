@@ -85,6 +85,12 @@
                   </div>
                   <script>
         
+                     function validateEmail(email) {
+                        // Email adresinin geçerli bir formatta olup olmadığını kontrol et
+                        var regex = /\S+@\S+\.\S+/;
+                        return regex.test(email);
+                    }
+                    
                     function addKullanici(event) {
                         event.preventDefault(); // Formun otomatik gönderimini engelle
                         var isim = document.getElementById("isim").value;
@@ -92,6 +98,19 @@
                         var sifre = document.getElementById("password").value;
                         var email = document.getElementById("email").value;
                     
+                        // Şifre uzunluğu ve email kontrolü yap
+                        if (sifre.length < 5 || sifre.length > 8) {
+                            alert("Şifre en az 5 en fazla 8 karakter olmalıdır.");
+                            return;
+                        }
+                    
+                        // Email formatını kontrol et
+                        if (!validateEmail(email)) {
+                            alert("Geçerli bir email adresi giriniz.");
+                            return;
+                        }
+                    
+                        // fetch isteği gönder
                         fetch("/add-endpoint", {
                             method: "POST",
                             headers: {
@@ -107,16 +126,21 @@
                         .then((response) => response.json())
                         .then((data) => {
                             console.log(data);
-                            $('#success-modal').modal('show');
-                            // Belirli bir süre sonra giriş sayfasına yönlendir
-                            setTimeout(function() {
-                                window.location.href = "{{ url_for('index') }}";
-                            }, 3000); // 3 saniye sonra yönlendirme yapılacak
+                            if (data.message === "Kullanıcı başarıyla eklendi") {
+                                $('#success-modal').modal('show');
+                                // Belirli bir süre sonra giriş sayfasına yönlendir
+                                setTimeout(function() {
+                                    window.location.href = "{{ url_for('index') }}";
+                                }, 3000); // 3 saniye sonra yönlendirme yapılacak
+                            } else {
+                                alert(data.message); // Hata mesajını göster
+                            }
                         })
                         .catch((error) => {
                             console.error("Hata:", error);
                         });
                     }
+                    
                 </script>
                   <div class="container-fluid">
                      <div class="footer">

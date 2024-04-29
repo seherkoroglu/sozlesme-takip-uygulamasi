@@ -47,7 +47,7 @@
 						<span class="user-icon">
 							<img src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="">
 						</span>
-						<span class="user-name">Emaar Türkiye</span>
+						<div class="user-name"></div>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						
@@ -58,7 +58,7 @@
 			
 		</div>
 	</div>
-
+	
 	
 	
 
@@ -137,7 +137,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="telefon">Telefon Numarası :</label>
-											<input name="telefon" id="telefon" type="text" class="form-control">
+											<input name="telefon" id="telefon" type="number" class="form-control">
 											
 										</div>
 									</div>
@@ -176,7 +176,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="departman_email">Departman E-Mail Adresi :</label>
-											<input  name="departman_email" id="departman_email" type="text" class="form-control">
+											<input  name="departman_email" id="departman_email" type="email" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -191,7 +191,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="firma_yetkilisi_email" >Yetkili Kişi E-Mail Adresi :</label>
-											<input name="firma_yetkilisi_email" id="firma_yetkilisi_email" type="text" class="form-control">
+											<input name="firma_yetkilisi_email" id="firma_yetkilisi_email" type="email" class="form-control">
 										</div>
 									</div>
 									
@@ -230,13 +230,13 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="ilgili_firma_telefon">İlgili Firma Telefon Numarası:</label>
-											<input name="ilgili_firma_telefon" id="ilgili_firma_telefon" type="text" class="form-control">
+											<input name="ilgili_firma_telefon" id="ilgili_firma_telefon" type="number" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="ilgili_firma_email">İlgili Firma E-Mail Adresi :</label>
-											<input name="ilgili_firma_email" id="ilgili_firma_email" type="text" class="form-control">
+											<input name="ilgili_firma_email" id="ilgili_firma_email" type="email" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -248,7 +248,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="ilgili_firma_yetkilisi_email">İlgili Firma Yetkili Kişi E-Mail Adresi :</label>
-											<input name="ilgili_firma_yetkilisi_email" id="ilgili_firma_yetkilisi_email"  type="text" class="form-control">
+											<input name="ilgili_firma_yetkilisi_email" id="ilgili_firma_yetkilisi_email"  type="email" class="form-control">
 										</div>
 									</div>
 									<div class="col-md-12">
@@ -406,7 +406,7 @@
 						<div class="modal-content">
 							<div class="modal-body text-center font-18">
 								<h3 class="mb-20">Sözleşme Eklendi!</h3>
-								<div class="mb-30 text-center"><img src="{{ url_for('static', filename='vendors/images/success.png') }}"></div>
+								<div class="mb-30 text-center"></div>
 								Sözleşmeye ait detaylar başarılı bir şekilde eklenmiştir.
 							</div>
 							<div class="modal-footer justify-content-center">

@@ -38,7 +38,6 @@ $(".tab-wizard").steps({
         
 	}
 });
-
 $(".tab-wizard2").steps({
 	headerTag: "h5",
 	bodyTag: "section",
@@ -141,10 +140,29 @@ $(".hesap").ready(function() {
             }
         });
     });
+
 });
 
-
 $(document).ready(function() {
+    var columnMappings = {
+        "sozlesme_id": "Sözleşme Numarası",
+        "aciklama": "Açıklama",
+        "baslangic_tarihi": "Başlangıç Tarihi",
+        "bitis_tarihi": "Bitiş Tarihi",
+        "bilgilendirme_amaci": "Bilgilendirme Amacı",
+        "bilgilendirme_saati": "Bilgilendirme Saati",
+        "bilgilendirme_tarihi": "Bilgilendirme Tarihi",
+        "bilgilendirme_tipi": "Bilgilendirme Tipi",
+        "departman_adi": "Departman Adı",
+        "firma_adi": "Firma Adı",
+        "ilgili_firma_adi": "İlgili Firma Adı",
+        "imza_yetkilisi": "İmza Yetkilisi",
+        "kullanici_id": "Kullanıcı Numarası",
+        "sozlesme_basligi": "Sözleşme Başlığı",
+        "sozlesme_icerigi": "Sözleşme İçeriği",
+        "sozlesme_kodu": "Sözleşme Kodu",
+    };
+
     function getData() {
         $.ajax({
             type: 'GET',
@@ -154,11 +172,12 @@ $(document).ready(function() {
                 var formContent = $('#formContent');
                 var table = $('<div class="table-responsive"></div>');
                 var tableInner = '<table class="table table-bordered">';
-                var tableHeader = '<thead><tr><th></th>'; // Boş başlık sütunu eklendi
+                var tableHeader = '<thead><tr><th></th>'; // Boş başlık sütunu ekle
                 
                 // Tablo başlıklarını oluştur
                 $.each(response[0], function(key, value) {
-                    tableHeader += '<th>' + key + '</th>';
+                    var columnHeader = columnMappings[key] || key; // Eğer sütun adı varsa onun karşılık geldiği başlığı kullan, yoksa sütun adını kullan
+                    tableHeader += '<th>' + columnHeader + '</th>';
                 });
                 tableHeader += '</tr></thead>';
                 tableInner += tableHeader;
@@ -177,7 +196,7 @@ $(document).ready(function() {
                 tableInner += '</table>';
                 table.append(tableInner);
                 
-                // Form içine tabloyu ekle
+                // Form içine tabloyu ekleme kodu
                 formContent.append(table);
             },
             error: function(xhr, status, error) {
@@ -201,11 +220,11 @@ $(document).ready(function() {
                     type: 'POST',
                     url: '/delete_contract',
                     data: { sozlesme_ids: selectedContractIds },
-                    traditional: true, // PHP tarafında dizi olarak almak için gerekli
+                    traditional: true, // PHP tarafında dizi olarak almak için 
                     success: function(response) {
-                        // Sözleşmeler başarıyla silindiğinde, tablodan kaldır
-                        $.each(selectedContractIds, function(index, contractId) {
-                            $('#formContent input[value="' + contractId + '"]').closest('tr').remove();
+                        // Sözleşmeler başarıyla silindiğinde, tablodan kaldırma kodu
+                        $.each(selectedContractIds, function(index, contract_id) {
+                            $('#formContent input[value="' + contract_id + '"]').closest('tr').remove();
                         });
                         alert('Sözleşmeler başarıyla silindi.');
                     },
@@ -219,4 +238,14 @@ $(document).ready(function() {
             alert('Lütfen silmek istediğiniz sözleşmeleri seçin.');
         }
     });
+});
+
+
+
+$(document).ready(function() {
+    // Flask tarafından kullanıcı adını aldık ve JavaScript değişkenine atadık
+    var username = "{{ session['username'] }}";
+
+    // Kullanıcı adını HTML içine yerleştirdik
+    $('.user-name').text("Hoşgeldin " + username);
 });

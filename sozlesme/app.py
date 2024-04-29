@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, flash, get_flashed_messages
 import mysql.connector
 from time import sleep
+import bcrypt
+import re
 
 app = Flask(__name__, static_folder='static')
 import os
@@ -17,14 +19,34 @@ def connect():
         return connection
     except mysql.connector.Error as err:
         print("Hata: ", err)
+        
+def check_password(sifre):
+    # En az 5 en fazla 8 karakter kontrolü
+    if len(sifre) < 5 or len(sifre) > 8:
+        return False
+    
+    # Büyük harf kontrolü
+    if not re.search("[A-Z]", sifre):
+        return False
+    
+    # Küçük harf kontrolü
+    if not re.search("[a-z]", sifre):
+        return False
+    
+    # Sembol kontrolü
+    if not re.search("[.+/=-_:;!@#$%^&*?]", sifre):
+        return False
+    
+    return True
 
 def add(isim, soyisim, sifre, email):
     try:
         connection = connect()
         cursor = connection.cursor()
+        hashed_sifre = bcrypt.hashpw(sifre.encode('utf-8'), bcrypt.gensalt())
         
         sql = "INSERT INTO kullanici (isim, soyisim, sifre, email) VALUES (%s, %s, %s, %s)"
-        values = (isim, soyisim, sifre, email)
+        values = (isim, soyisim, hashed_sifre.decode('utf-8'), email)
         cursor.execute(sql, values)
         connection.commit()
         print("Kullanıcı eklendi")
@@ -68,18 +90,30 @@ def add_kullanici():
     try:
         # Gelen JSON verisini al
         data = request.json
+        connection = connect()
+        cursor = connection.cursor()
         
         # Gelen JSON'un eksik olup olmadığını kontrol et
         if 'isim' not in data or 'soyisim' not in data or 'sifre' not in data or 'email' not in data:
             return jsonify({"message": "Eksik parametreler"}), 400
         
-        # Kullanıcı bilgilerini al
+        # Kullanıcı bilgilerini almak
         isim = data['isim']
         soyisim = data['soyisim']
         sifre = data['sifre']
         email = data['email']
         
-        # Veritabanına ekleme işlemi
+        if not check_password(sifre):
+            return jsonify({"message": "Şifre en az 5 en fazla 8 karakter olmalı, büyük harf, küçük harf ve sembol içermelidir."}), 400
+        
+        # Email kontrolü yap
+        
+        cursor.execute("SELECT email FROM kullanici WHERE email = %s", (email,))
+        existing_email = cursor.fetchone()
+        if existing_email:
+            return jsonify({"message": "Bu email adresi zaten kullanılmaktadır."}), 400
+        
+        # Veritabanına ekleme
         add(isim, soyisim, sifre, email)
         
         # Başarı durumunda yanıt gönder
@@ -106,7 +140,7 @@ def login():
         
         if user:
             # Eğer kullanıcı bulunduysa, giriş yap ve ana sayfaya yönlendir
-            flash('Giriş başarılı.', 'success')
+            
             # Kullanıcı adını session'a kaydet
             session['username'] = user[3]
             session['soyisim'] = user[4]
@@ -117,7 +151,10 @@ def login():
             kullanici_id = user[0]
             print("Giriş yapan kullanıcının ID'si:", kullanici_id)
             
+       
             return redirect(url_for('sozlesme_ekle'))
+            
+            
         else:
             # Eğer kullanıcı bulunamadıysa veya şifre yanlışsa, hata mesajı göster
             flash('Hatalı e-posta veya şifre, lütfen tekrar deneyin.', 'danger')
@@ -132,7 +169,7 @@ def login():
             connection.close()
 
 
-# Diğer route'lar
+# Diğer yönlendirmeler
 def ekle_departman(departman_adi, departman_email):
     try:
         connection = connect()
@@ -213,7 +250,7 @@ def ekle_sozlesme(sozlesme_basligi, email, firma_adi, departman_adi, ilgili_firm
         connection = connect()
         cursor = connection.cursor()
         
-        # SQL sorgusunda JOIN kullanarak gerekli bilgileri al
+        # SQL sorgusunda JOIN(tabloları birleştiriyor) kullanarak gerekli bilgileri alıyoruz
         sql = """
         INSERT INTO sozlesme (sozlesme_basligi, kullanici_id, firma_id, departman_id, ilgili_firma_id, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama)
         SELECT %s, k.kullanici_id, f.firma_id, d.departman_id, i.ilgili_firma_id, %s, %s, %s, %s
@@ -225,7 +262,7 @@ def ekle_sozlesme(sozlesme_basligi, email, firma_adi, departman_adi, ilgili_firm
         
         values = (sozlesme_basligi, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama, email, firma_adi, departman_adi, ilgili_firma_adi)
         
-        # Sorguyu çalıştır ve değişiklikleri kaydet
+        # Sorguyu çalıştırma ve değişiklikleri kaydetme kodu
         cursor.execute(sql, values)
         connection.commit()
         
@@ -246,12 +283,12 @@ def ekle_sozlesme_bilgileri(sozlesme_kodu, baslangic_tarihi, bitis_tarihi, bilgi
         connection = connect()
         cursor = connection.cursor()
         
-        # Sözleşme bilgilerini eklemek için sözleşme ID'sini al
+        # Sözleşme bilgilerini eklemek için sözleşme ID'sini alıyoruz
         cursor.execute("SELECT sozlesme_id FROM sozlesme WHERE sozlesme_kodu = %s", (sozlesme_kodu,))
         sozlesme_id = cursor.fetchone()[0]
         print ("Sözleşme ID:", sozlesme_id)
         
-        # Sözleşme bilgilerini ekleme
+        # Sözleşme bilgilerini ekleme sorgusu
         sql = "INSERT INTO sozlesme_bilgileri (sozlesme_id, baslangic_tarihi, bitis_tarihi, bilgilendirme_amaci, bilgilendirme_tipi, bilgilendirme_tarihi, bilgilendirme_saati) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = (sozlesme_id, baslangic_tarihi, bitis_tarihi, bilgilendirme_amaci, bilgilendirme_tipi, bilgilendirme_tarihi, bilgilendirme_saati)
         cursor.execute(sql, values)
@@ -273,13 +310,13 @@ def save_sozlesme():
     try:
         data = request.json
 
-        # Kullanıcının oturum bilgilerini al
+        # Kullanıcının oturum bilgilerini aldık
         email = session.get('email')
 
         if not email:
             return jsonify({"message": "Oturum açılmamış kullanıcı"}), 401
 
-        # Formdan gelen verileri al
+        # Formdan gelen verileri aldık
         baslangic_tarihi = data['baslangic_tarihi']
         bitis_tarihi = data['bitis_tarihi']
         bilgilendirme_amaci = data['bilgilendirme_amaci']
@@ -303,12 +340,12 @@ def save_sozlesme():
         departman_adi = data['departman_adi']
         departman_email = data['departman_email']
 
-        # Firma, departman ve ilgili firma bilgilerini ekleyelim
+        # Firma, departman ve ilgili firma bilgilerini ekledik
         ekle_departman(departman_adi, departman_email)
         ekle_firma(firma_adi, telefon, firma_yetkilisi, firma_yetkilisi_email)
         ekle_ilgilifirma(ilgili_firma_adi, ilgili_firma_telefon, ilgili_firma_email, ilgili_firma_yetkilisi, ilgili_firma_yetkilisi_email)
 
-        # Eklenen bilgileri kullanarak sözleşmeyi ekleyelim
+        # Eklenen bilgileri kullanarak sözleşmeyi ekliyoruz
         connection = connect()
         cursor = connection.cursor()
 
@@ -324,15 +361,15 @@ def save_sozlesme():
 
         values = (sozlesme_basligi, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama, email, firma_adi, departman_adi, ilgili_firma_adi)
 
-        # Sorguyu çalıştır ve değişiklikleri kaydet
+        # Sorguyu çalıştırma kodu ve değişiklikleri kaydetme kodu
         cursor.execute(sql, values)
         connection.commit()
 
-        # Eklenen sözleşmenin ID'sini alalım
+        # Eklenen sözleşmenin ID'sini alıyoruz
         sozlesme_id = cursor.lastrowid
         print("Sözleşme eklendi, ID:", sozlesme_id)
     
-        # Sözleşme bilgilerini ekleyelim
+        # Sözleşme bilgilerini ekledik
         sql_sozlesme_bilgileri = """
         INSERT INTO sozlesme_bilgileri (sozlesme_id, baslangic_tarihi, bitis_tarihi, bilgilendirme_amaci, bilgilendirme_tipi, bilgilendirme_tarihi, bilgilendirme_saati)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -343,7 +380,7 @@ def save_sozlesme():
         
         return jsonify({"message": "Sözleşme başarıyla eklendi", "sozlesme_id": sozlesme_id}), 200
     except Exception as e:
-        # Hata durumunda yanıt gönder
+        # Hata durumunda dönen yanıt
         return jsonify({"message": "Sözleşme eklenirken bir hata oluştu"}), 500
 
     
@@ -371,22 +408,22 @@ def delete_user(email):
 @app.route('/delete-account', methods=['POST'])
 def delete_account():
     try:
-        # Kullanıcı oturum bilgilerinden e-posta adresini al
+        # Kullanıcı oturum bilgilerinden e-posta adresini aldık
         email = session.get('email')
         
         if not email:
             return jsonify({"message": "Kullanıcı oturumu bulunamadı."}), 401
         
-        # Kullanıcıyı veritabanından sil
+        # Kullanıcıyı veritabanından sildik
         delete_user(email)
         
         # Oturumu sonlandır
         session.clear()
         
-        # Başarı durumunda yanıt gönder
+        # Başarı durumunda yanıt gönderdik
         return jsonify({"message": "Kullanıcı başarıyla silindi"}), 200
     except Exception as e:
-        # Hata durumunda yanıt gönder
+        # Hata durumunda yanıt gönderdik
         return jsonify({"message": "Kullanıcı silinirken bir hata oluştu"}), 500
 
 
@@ -394,21 +431,21 @@ def delete_account():
 @app.route('/change-password', methods=['POST'])
 def change_password():
     try:
-        # Yeni şifre ve kullanıcı adını al
+        # Yeni şifre ve kullanıcı adını aldık
         new_password = request.form['new_password']
         username = session['username']
         
-        # Veritabanında kullanıcıyı güncelle
+        # Veritabanında kullanıcıyı güncelledik
         connection = connect()
         cursor = connection.cursor()
         cursor.execute("UPDATE kullanici SET sifre = %s WHERE isim = %s", (new_password, username))
         connection.commit()
         
-        # Başarılı mesajını göster
+        # Başarılı mesajını gösterdik
         return jsonify({"message": "Şifre başarıyla değiştirildi.", "sifre": new_password}), 200
 
     except Exception as e:
-        # Hata durumunda yanıt gönder
+        # Hata durumunda yanıt gönderdik
         return jsonify({"message": "Şifre değiştirme sırasında bir hata oluştu."}), 500
     
     
@@ -423,9 +460,9 @@ def get_data():
          if connection.is_connected():
             print("Connected to MySQL database")
             
-            # Kullanıcı ID'sini al
+            # Kullanıcı ID'sini aldık
             kullanici_id = session.get('kullanici_id')
-            # Veritabanından verileri al
+            # Veritabanından verileri aldık
             cursor = connection.cursor(dictionary=True)
             query = """
             SELECT s.sozlesme_id, s.kullanici_id, f.firma_adi, d.departman_adi, il.ilgili_firma_adi, 
@@ -440,7 +477,7 @@ def get_data():
         WHERE s.kullanici_id = %s
             """
             cursor.execute(query, (kullanici_id,))
-            data = cursor.fetchall()  # Tüm sözleşmeleri almak için fetchall() kullan
+            data = cursor.fetchall()  # Tüm sözleşmeleri almak için fetchall() kullandık
             return jsonify(data)
         
         
@@ -450,30 +487,33 @@ def get_data():
     
     
     
-from flask import request, jsonify
+
 from flask import request, jsonify
 
 @app.route('/delete_contract', methods=['POST'])
 def delete_contract():
     try:
-        # İstekten sözleşme ID'sini al
-        contract_id = request.form.get('sozlesme_id')
+        # İstekten sözleşme ID'lerini aldık
+        contract_ids = request.form.getlist('sozlesme_ids')
         
-        # Sözleşmeyi sozlesme tablosundan sil
+        # Sözleşmeleri sozlesme_bilgileri tablosundan sildik
         connection = connect()
         cursor = connection.cursor()
-        delete_query = "DELETE FROM sozlesme WHERE sozlesme_id = %s"
-        cursor.execute(delete_query, (contract_id,))
-        
-        # Sözleşmeyi sozlesme_bilgileri tablosundan da sil
-        delete_query = "DELETE FROM sozlesme_bilgileri WHERE sozlesme_id = %s"
-        cursor.execute(delete_query, (contract_id,))
+        for contract_id in contract_ids:
+            # Sözleşmeyi sozlesme_bilgileri tablosundan sildik
+            delete_query = "DELETE FROM sozlesme_bilgileri WHERE sozlesme_id = %s"
+            cursor.execute(delete_query, (contract_id,))
+            
+            # Sözleşmeyi sozlesme tablosundan da sildik
+            delete_query = "DELETE FROM sozlesme WHERE sozlesme_id = %s"
+            cursor.execute(delete_query, (contract_id,))
         
         connection.commit()
         
-        return jsonify({'message': 'Sözleşme başarıyla silindi.'}), 200
+        return jsonify({'message': 'Seçilen sözleşmeler başarıyla silindi.'}), 200
     except Exception as e:
-        return jsonify({'error': 'Sözleşme silinirken bir hata oluştu: ' + str(e)}), 500
+        return jsonify({'error': 'Sözleşmeler silinirken bir hata oluştu: ' + str(e)}), 500
+
 
 
 
