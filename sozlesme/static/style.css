@@ -580,6 +580,11 @@ a:focus {
     display: flex;
     justify-content: center;
 }
+.center_uyeol{
+    display: flex;
+    justify-content: center;
+
+}
 
 .verticle_center {
     display: flex;
@@ -607,7 +612,19 @@ a:focus {
     width: 100%;
     max-width: 100%;
     padding: 0;
-    margin: 0;
+    margin-top: 10%;
+    margin-bottom: 10%;
+
+}
+
+.uyeol_container{
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    
+    
+
+
 }
 
 .inner_container {
@@ -3275,10 +3292,31 @@ table.projects tr td:first-child {
     border-radius: 10px;
     overflow: hidden;
 }
+.login_uyeol{
+    max-width: 640px;
+    background: #fff;
+    min-height: 540px;
+    width: 100%;
+    box-shadow: 0px 0 10px -8px #000;
+    margin-top: 50%;
+    margin-bottom: 30%;
+    padding: 0;
+    border-radius: 10px;
+    
+
+}
 
 .logo_login {
     background: url('images/layout_img/login_image.jpg');
     padding: 20% 0;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+
+}
+.logo_login_uyeol{
+    background: url('images/layout_img/login_image.jpg');
+    padding: 0 0;
     background-position: center center;
     background-size: cover;
     position: relative;
@@ -3296,7 +3334,23 @@ table.projects tr td:first-child {
     left: 0;
 }
 
+.logo_login_uyeol::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(21, 40, 60, .8);
+    top: 0px;
+    left: 0;
+}
+
 .logo_login div {
+    position: relative;
+    z-index: 1;
+}
+
+.logo_login_uyeol div {
     position: relative;
     z-index: 1;
 }
@@ -3305,6 +3359,12 @@ table.projects tr td:first-child {
     padding: 50px 50px;
     float: left;
     width: 100%;
+}
+.login_form_uyeol{
+    padding: 50px 50px;
+    float: left;
+    width: 100%;
+
 }
 
 .login_form form {
@@ -3362,6 +3422,73 @@ table.projects tr td:first-child {
     margin-left: 20px;
     position: relative;
     top: 0;
+}
+
+
+
+
+
+
+
+.login_form_uyeol form {
+    float: left;
+    width: 100%;
+}
+
+.login_form_uyeol form .field {
+    display: flex;
+    margin: 0;
+}
+
+.login_form_uyeol form .field label.label_field {
+    margin: 0 30px 0 0;
+    width: 115px;
+    line-height: 45px;
+    text-align: right;
+    height: 45px;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.login_form_uyeol form .field {
+    display: block;
+    margin: 0 0 20px;
+}
+
+.login_form_uyeol form .field input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #ddd 2px;
+    width: 395px;
+    float: right;
+    padding: 10px;
+    line-height: normal;
+    font-weight: 300;
+    transition: ease all 0.5s;
+}
+
+.login_form_uyeol form .field input:hover,
+.login_form_uyeol form .field input:focus {
+    box-shadow: none;
+}
+
+.login_form_uyeol .field label.form-check-label .form-check-input {
+    width: auto;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.login_form_uyeol .field label.form-check-label {
+    margin-left: 20px;
+    position: relative;
+    top: 0;
+}
+
+.login_form_uyeol{
+
 }
 
 .forgot {

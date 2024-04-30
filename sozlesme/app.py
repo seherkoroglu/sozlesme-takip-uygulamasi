@@ -122,9 +122,8 @@ def add_kullanici():
         # Hata durumunda yanıt gönder
         return jsonify({"message": "Kullanıcı eklenirken bir hata oluştu"}), 500
     
-    
 
-    
+
 @app.route('/login', methods=['POST'])
 def login():
     connection = None 
@@ -135,28 +134,33 @@ def login():
         # Veritabanında kullanıcıyı sorgula
         connection = connect()
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM kullanici WHERE email = %s AND sifre = %s", (email, password))
+        cursor.execute("SELECT * FROM kullanici WHERE email = %s", (email,))
         user = cursor.fetchone()
         
         if user:
-            # Eğer kullanıcı bulunduysa, giriş yap ve ana sayfaya yönlendir
+            # Eğer kullanıcı bulunduysa, şifreyi kontrol et
+            hashed_password_in_db = user[1].encode('utf-8')
             
-            # Kullanıcı adını session'a kaydet
-            session['username'] = user[3]
-            session['soyisim'] = user[4]
-            session['email'] = user[2]
-            session['sifre'] = user[1]
-            session['kullanici_id'] = user[0]
-            
-            kullanici_id = user[0]
-            print("Giriş yapan kullanıcının ID'si:", kullanici_id)
-            
-       
-            return redirect(url_for('sozlesme_ekle'))
-            
+            # Girilen şifreyi hashleyerek veritabanındakiyle karşılaştır
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password_in_db):
+                # Kullanıcı girişi başarılı ise, oturum bilgilerini ayarla
+                session['username'] = user[3]
+                session['soyisim'] = user[4]
+                session['email'] = user[2]
+                session['sifre'] = user[1]
+                session['kullanici_id'] = user[0]
+                
+                kullanici_id = user[0]
+                print("Giriş yapan kullanıcının ID'si:", kullanici_id)
+                
+                return redirect(url_for('sozlesme_ekle'))
+            else:
+                # Şifre doğrulanamadı
+                flash('Hatalı e-posta veya şifre, lütfen tekrar deneyin.', 'danger')
+                return redirect(url_for('index'))
             
         else:
-            # Eğer kullanıcı bulunamadıysa veya şifre yanlışsa, hata mesajı göster
+            # Eğer kullanıcı bulunamadıysa, hata mesajı göster
             flash('Hatalı e-posta veya şifre, lütfen tekrar deneyin.', 'danger')
             return redirect(url_for('index'))
         
@@ -167,6 +171,7 @@ def login():
     finally:
         if connection is not None:
             connection.close()
+
 
 
 # Diğer yönlendirmeler
@@ -245,38 +250,7 @@ def ekle_ilgilifirma(ilgili_firma_adi, ilgili_firma_telefon, ilgili_firma_email,
             
                         
 
-def ekle_sozlesme(sozlesme_basligi, email, firma_adi, departman_adi, ilgili_firma_adi, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama):
-    try:
-        connection = connect()
-        cursor = connection.cursor()
-        
-        # SQL sorgusunda JOIN(tabloları birleştiriyor) kullanarak gerekli bilgileri alıyoruz
-        sql = """
-        INSERT INTO sozlesme (sozlesme_basligi, kullanici_id, firma_id, departman_id, ilgili_firma_id, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama)
-        SELECT %s, k.kullanici_id, f.firma_id, d.departman_id, i.ilgili_firma_id, %s, %s, %s, %s
-        FROM kullanici k
-        JOIN firma f ON k.email = %s AND f.firma_adi = %s
-        JOIN departman d ON d.departman_adi = %s
-        JOIN ilgili_firma i ON i.ilgili_firma_adi = %s
-        """
-        
-        values = (sozlesme_basligi, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama, email, firma_adi, departman_adi, ilgili_firma_adi)
-        
-        # Sorguyu çalıştırma ve değişiklikleri kaydetme kodu
-        cursor.execute(sql, values)
-        connection.commit()
-        
-        sozlesme_id = cursor.lastrowid
-        print("Sözleşme eklendi, ID:", sozlesme_id)
-        
-        print("Sözleşme eklendi")
-    
-    except mysql.connector.Error as err:
-        print("Hata: ", err)
 
-    finally:
-        if connection.is_connected():
-            cursor.close()            
         
 def ekle_sozlesme_bilgileri(sozlesme_kodu, baslangic_tarihi, bitis_tarihi, bilgilendirme_amaci, bilgilendirme_tipi, bilgilendirme_tarihi, bilgilendirme_saati):
     try:
@@ -357,6 +331,7 @@ def save_sozlesme():
         JOIN firma f ON k.email = %s AND f.firma_adi = %s
         JOIN departman d ON d.departman_adi = %s
         JOIN ilgili_firma i ON i.ilgili_firma_adi = %s
+        LIMIT 1
         """
 
         values = (sozlesme_basligi, sozlesme_icerigi, sozlesme_kodu, imza_yetkilisi, aciklama, email, firma_adi, departman_adi, ilgili_firma_adi)
@@ -426,6 +401,24 @@ def delete_account():
         # Hata durumunda yanıt gönderdik
         return jsonify({"message": "Kullanıcı silinirken bir hata oluştu"}), 500
 
+def check_newpassword(new_password):
+    # En az 5 en fazla 8 karakter kontrolü
+    if len(new_password) < 5 or len(new_password) > 8:
+        return False
+    
+    # Büyük harf kontrolü
+    if not re.search("[A-Z]", new_password):
+        return False
+    
+    # Küçük harf kontrolü
+    if not re.search("[a-z]", new_password):
+        return False
+    
+    # Sembol kontrolü
+    if not re.search("[.+/=-_:;!@#$%^&*?]", new_password):
+        return False
+    
+    return True
 
 
 @app.route('/change-password', methods=['POST'])
@@ -438,7 +431,23 @@ def change_password():
         # Veritabanında kullanıcıyı güncelledik
         connection = connect()
         cursor = connection.cursor()
-        cursor.execute("UPDATE kullanici SET sifre = %s WHERE isim = %s", (new_password, username))
+
+        # Eski şifreyi veritabanından al
+        cursor.execute("SELECT sifre FROM kullanici WHERE isim = %s", (username,))
+        old_password = cursor.fetchone()[0]
+
+        # Eğer yeni şifre eski şifreyle aynı ise işlemi gerçekleştirme
+        if new_password == old_password:
+            return jsonify({"message": "Yeni şifre, eski şifre ile aynı olamaz."}), 400
+        
+        if not check_newpassword(new_password):
+            return jsonify({"message": "Yeni şifre en az 5 en fazla 8 karakter olmalı, büyük harf, küçük harf ve sembol içermelidir."}), 400
+
+        # Yeni şifreyi hash'le
+        hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+        # Veritabanında kullanıcıyı güncelledik
+        cursor.execute("UPDATE kullanici SET sifre = %s WHERE isim = %s", (hashed_new_password, username))
         connection.commit()
         
         # Başarılı mesajını gösterdik
@@ -447,6 +456,7 @@ def change_password():
     except Exception as e:
         # Hata durumunda yanıt gönderdik
         return jsonify({"message": "Şifre değiştirme sırasında bir hata oluştu."}), 500
+
     
     
 
@@ -486,9 +496,6 @@ def get_data():
         return jsonify({'error': str(e)}), 500
     
     
-    
-
-from flask import request, jsonify
 
 @app.route('/delete_contract', methods=['POST'])
 def delete_contract():
