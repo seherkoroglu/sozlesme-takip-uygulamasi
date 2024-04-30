@@ -242,10 +242,4 @@ $(document).ready(function() {
 
 
 
-$(document).ready(function() {
-    // Flask tarafından kullanıcı adını aldık ve JavaScript değişkenine atadık
-    var username = "{{ session['username'] }}";
 
-    // Kullanıcı adını HTML içine yerleştirdik
-    $('.user-name').text("Hoşgeldin " + username);
-});

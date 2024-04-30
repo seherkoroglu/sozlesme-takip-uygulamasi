@@ -47,7 +47,7 @@
 						<span class="user-icon">
 							<img src="{{ url_for('static', filename='images/logo/banner-img.png') }}" alt="">
 						</span>
-						<div class="user-name"></div>
+						<span class="user-name">Hoşgeldin {{ session['username'] }}!</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						
@@ -79,11 +79,11 @@
 					<li class="dropdown">
 						
 						<a href="sozlesmelerim" class="dropdown-toggle">
-							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşme Ekle</span></i>
+							<i class="fa fa-envelope-open-o purple_color">   <span class="mtext">Sözleşme Detayları</span></i>
 							
 						</a>
 						<a href="sozlesme_ekle" class="dropdown-toggle">
-							<i class="fa fa-folder-o purple_color">   <span class="mtext">Sözleşme Detayları</span></i>
+							<i class="fa fa-folder-o purple_color">   <span class="mtext">Sözleşme Ekle</span></i>
 							
 						</a>
 						<a href="hesabim.html" class="dropdown-toggle">
