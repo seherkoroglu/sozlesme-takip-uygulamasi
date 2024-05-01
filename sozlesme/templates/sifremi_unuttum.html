@@ -54,36 +54,30 @@
                      </div>
                   </div>
                   <div class="login_form">
-                     <form action="{{ url_for('login') }}"  method="POST">
+                     <form action="/sifre_unutmak"  method="POST">
                         <fieldset>
-                           <h1><b>Sözleşme Takip</b></h1>
+                           <h1><b>Şifremi Unuttum</b></h1>
                            <br>
                           
                            <div class="field">
                              
-                                 {% for message in messages %}
-                                     <div class="flash-message">{{ message }}</div>
-                                 {% endfor %}
-                         
                               
-                              <label class="label_field">E-Mail Adresi</label>
+                              <label class="label_field">E-Mail</label>
                               <input type="email" name="email" placeholder="" required/>
                            </div>
                            <div class="field">
-                              <label class="label_field">Şifre</label>
-                              <input type="password" name="password" placeholder="" required />
+                              <label class="label_field">Yeni Şifre</label>
+                              <input type="password" name="new_password" placeholder="" required />
                            </div>
-                           
-                           <div class="field margin_0" style ="flex-direction:row">
-                              <button type="submit" class="main_bt" style="margin-left: 5%"></a>Giriş Yap</button>
-                              <a href="{{ url_for('uye_ol') }}" class="main_bt">Üye Ol</a>
-                           </div>
-                              <br>
-                              <a href="sifremi_unuttum" class="forgot_password">Şifremi Unuttum</a>
-                        
-                        </fieldset>
-                     </form>
-
+                           <div class="field">
+                            <label class="label_field">Yeni Şifre Tekrar</label>
+                            <input type="password" name="confirm_password" placeholder="" required />
+                         </div>
+                         <div class="field margin_0" >
+                            <button type="submit" class="main_bt" style="margin-left: 5%"></a>Kaydet</button>
+                            <a href="{{ url_for('index') }}" class="main_bt" style="margin-left: 5%">Vazgeç</a>
+                         </div>
+                       
                    
                   </div>
                   <div class="container-fluid">
@@ -104,22 +98,7 @@
             
          </div>
       </div>
-      <script>
-         // Sayfa yüklendiğinde flash mesajlarını kontrol et
-         document.addEventListener('DOMContentLoaded', function() {
-             var flashMessages = document.querySelectorAll('.flash-message');
-             flashMessages.forEach(function(message) {
-                 // Her bir flash mesajını 3 saniye sonra otomatik olarak gizle
-                 setTimeout(function() {
-                     message.style.opacity = 0;
-                     message.style.transition = 'opacity 0.5s';
-                     setTimeout(function() {
-                         message.style.display = 'none';
-                     }, 500); // Opaklık animasyonu tamamlanınca mesajı gizle
-                 }, 3000);
-             });
-         });
-     </script>
+
          <!-- jQuery -->
       <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>

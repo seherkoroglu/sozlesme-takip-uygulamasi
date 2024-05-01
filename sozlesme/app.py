@@ -6,14 +6,22 @@ from datetime import datetime, timedelta
 from time import sleep
 import bcrypt
 import re
+import os
 
 app = Flask(__name__, static_folder='static')
-import os
+mail = Mail(app)
+app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'seherkor2013@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Seher123'
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TSL'] = False
+
+
 app.secret_key = os.urandom(24)
 
 
 # Configure MySQL
-
 def connect():
     try:
         connection = mysql.connector.connect(
@@ -86,6 +94,10 @@ def hesabim():
 @app.route('/sozlesmelerim', methods=['GET'])
 def sozlesmelerim():
     return render_template('sozlesmelerim.html')
+
+@app.route('/sifremi_unuttum', methods=['GET'])
+def sifremi_unuttum():
+    return render_template('sifremi_unuttum.html')
 
 
 @app.route('/add-endpoint', methods=['POST'])
@@ -174,6 +186,18 @@ def login():
     finally:
         if connection is not None:
             connection.close()
+            
+            
+@app.route('/send-email', methods=['POST'])
+def send_email():
+    if request.method == 'POST':
+        email = session.get('email')
+        msg = Message("Hello", sender='noreply@demo.com', recipients=[email])
+        msg.body = "This is a test email"
+        mail.send(msg)
+        return jsonify({"message": "Email sent"}), 200
+    return render_template('sozlesmelerim.html')
+
 
 # Diğer yönlendirmeler
 def ekle_departman(departman_adi, departman_email):
@@ -535,12 +559,48 @@ def delete_contract():
 
 
 
+@app.route('/sifre_unutmak', methods=['GET', 'POST'])
+def sifre_unutmak():
 
-            
+    if request.method == 'POST':
+        email = request.form['email']
+        connection = connect()
         
-    
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        
+        # Veritabanından mevcut kullanıcının bilgilerini al
+        connection = connect()
+        cursor = connection.cursor()
+        cursor.execute("SELECT sifre FROM kullanici WHERE email = %s", (email,))
+        user = cursor.fetchone()
+        
+        # Eğer kullanıcı bulunamadıysa, hata mesajı gönder
+        if not user:
+            return jsonify({"message": "Kullanıcı bulunamadı."}), 404
+        
+        # Yeni şifre ile doğrulama yap ve uygunluğunu kontrol et
+        if new_password != confirm_password:
+            return jsonify({"message": "Yeni şifreler uyuşmuyor."}), 400
+        if not check_newpassword(new_password):
+            return jsonify({"message": "Yeni şifre gereksinimleri karşılamıyor."}), 400
+        
+        # Yeni şifreyi hashle ve veritabanında güncelle
+        hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+        update_query = "UPDATE kullanici SET sifre = %s WHERE email = %s"
+        cursor.execute(update_query, (hashed_new_password, email))
+        connection.commit()
+        
+        flash("Başarılı", "success")
+        return redirect(url_for('index'))
+    else:
+        flash("Girdiğiniz e-posta adresi kayıtlı değil. Lütfen geçerli bir e-posta adresi girin.", "error")
+        return redirect(url_for('sifremi_unuttum'))
 
-    
+        
+        
+        
+            
     
 if __name__ == '__main__':
     app.run(debug=True) 
