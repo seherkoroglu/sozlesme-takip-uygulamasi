@@ -3,19 +3,15 @@ from flask import Flask, render_template, request, jsonify, redirect, session, u
 import mysql.connector
 from flask_mail import Mail, Message
 from datetime import datetime, timedelta
+import sendgrid
+from sendgrid.helpers.mail import Mail
 from time import sleep
 import bcrypt
 import re
 import os
 
 app = Flask(__name__, static_folder='static')
-mail = Mail(app)
-app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'seherkor2013@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Seher123'
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USE_TSL'] = False
+
 
 
 app.secret_key = os.urandom(24)
@@ -188,15 +184,6 @@ def login():
             connection.close()
             
             
-@app.route('/send-email', methods=['POST'])
-def send_email():
-    if request.method == 'POST':
-        email = session.get('email')
-        msg = Message("Hello", sender='noreply@demo.com', recipients=[email])
-        msg.body = "This is a test email"
-        mail.send(msg)
-        return jsonify({"message": "Email sent"}), 200
-    return render_template('sozlesmelerim.html')
 
 
 # Diğer yönlendirmeler
