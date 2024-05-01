@@ -96,52 +96,53 @@ function hesabiSil(event) {
     }
 }
 
-$(".hesap").ready(function() {
-    $('#sifreDegistir').click(function() {
-        // Yeni şifre alanlarını görünür yap
-        $('.new-password-fields').show();
+document.addEventListener('DOMContentLoaded', function() {
+    // Form submit olayını dinle
+    document.getElementById('changePasswordForm').addEventListener('submit', function(event) {
+        // Sayfanın yeniden yüklenmesini engelle
+        event.preventDefault();
         
-        // Yeni şifre alanlarını al
-        var new_password = $('#new_password').val();
-        var confirm_password = $('#confirm_password').val();
-        
-       
-        // Yeni şifreler uyuşmuyorsa hata ver
-        if (new_password !== confirm_password) {
-            alert("Yeni şifreler uyuşmuyor. Lütfen tekrar deneyin.");
-            // Uyuşmadıkları için işlemi durdur
-            return;
-        }
-
-		 // Yeni şifre alanlarının dolu olup olmadığını kontrol et
-		 if (new_password === '' || confirm_password === '') {
-            alert("Lütfen yeni şifre alanlarını doldurun.");
-            // Dolu olmadıkları için işlemi durdur
-            return;
-        }
-
-
-        // AJAX ile şifre değiştirme işlemini gerçekleştir
-        $.ajax({
-            url: '/change-password',
-            method: 'POST',
-            data: { new_password: new_password },
-            success: function(response) {
-                alert(response.message);
-                // Şifre değiştirme başarılı olduğunda hesabim.html sayfasına yönlendir
-               
-                $('#sifre').val(new_password);
-				$('#new_password').val('');
-                $('#confirm_password').val('');
-				
-            },
-            error: function(xhr, status, error) {
-                alert("Şifre değiştirme sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
-            }
+        // Form verilerini al
+        var currentPassword = document.getElementById('current_password').value;
+        var newPassword = document.getElementById('new_password').value;
+        var confirmPassword = document.getElementById('confirm_password').value;
+        document.querySelectorAll('.new-password-fields').forEach(function(field) {
+            field.style.display = 'block';
         });
+        // AJAX ile POST isteği gönder
+        var xhr = new XMLHttpRequest();
+        var url = '/change-password';
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                var response = JSON.parse(xhr.responseText);
+                // Yanıtı işle
+                if (xhr.status === 200) {
+                    // Başarılı yanıt
+                    alert(response.message);
+                    // Şifre değiştirme formunu sıfırla
+                    document.getElementById('changePasswordForm').reset();
+                } else {
+                    // Hata durumu
+                    alert(response.message);
+                }
+            }
+        };
+        
+        // POST verilerini oluştur
+        var params = '&current_password=' + encodeURIComponent(currentPassword) +
+                     '&new_password=' + encodeURIComponent(newPassword) +
+                     '&confirm_password=' + encodeURIComponent(confirmPassword);
+        
+        // İsteği gönder
+        xhr.send(params);
     });
-
 });
+
+    
+
+
 
 $(document).ready(function() {
     var columnMappings = {

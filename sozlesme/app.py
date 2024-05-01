@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, flash, get_flashed_messages
+
 import mysql.connector
+from flask_mail import Mail, Message
+from datetime import datetime, timedelta
 from time import sleep
 import bcrypt
 import re
@@ -171,8 +174,6 @@ def login():
     finally:
         if connection is not None:
             connection.close()
-
-
 
 # Diğer yönlendirmeler
 def ekle_departman(departman_adi, departman_email):
@@ -424,42 +425,52 @@ def check_newpassword(new_password):
 @app.route('/change-password', methods=['POST'])
 def change_password():
     try:
-        # Yeni şifre ve kullanıcı adını aldık
-        new_password = request.form['new_password']
-        username = session['username']
+        # Oturumdan kullanıcı e-postasını al
+        email = session.get('email')
         
-        # Veritabanında kullanıcıyı güncelledik
+        # Eğer kullanıcı oturumu yoksa veya e-posta yoksa, hata mesajı gönder
+        if not email:
+            return jsonify({"message": "Oturum açılmamış veya kullanıcı e-postası alınamadı."}), 401
+        
+        # Formdan mevcut ve yeni şifreleri al
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        
+        # Veritabanından mevcut kullanıcının bilgilerini al
         connection = connect()
         cursor = connection.cursor()
-
-        # Eski şifreyi veritabanından al
-        cursor.execute("SELECT sifre FROM kullanici WHERE isim = %s", (username,))
-        old_password = cursor.fetchone()[0]
-
-        # Eğer yeni şifre eski şifreyle aynı ise işlemi gerçekleştirme
-        if new_password == old_password:
-            return jsonify({"message": "Yeni şifre, eski şifre ile aynı olamaz."}), 400
+        cursor.execute("SELECT sifre FROM kullanici WHERE email = %s", (email,))
+        user = cursor.fetchone()
         
+        # Eğer kullanıcı bulunamadıysa, hata mesajı gönder
+        if not user:
+            return jsonify({"message": "Kullanıcı bulunamadı."}), 404
+        
+        # Mevcut şifreyi kontrol et
+        hashed_password_in_db = user[0].encode('utf-8')
+        if not bcrypt.checkpw(current_password.encode('utf-8'), hashed_password_in_db):
+            return jsonify({"message": "Mevcut şifre yanlış."}), 400
+        
+        # Yeni şifre ile doğrulama yap ve uygunluğunu kontrol et
+        if new_password != confirm_password:
+            return jsonify({"message": "Yeni şifreler uyuşmuyor."}), 400
         if not check_newpassword(new_password):
-            return jsonify({"message": "Yeni şifre en az 5 en fazla 8 karakter olmalı, büyük harf, küçük harf ve sembol içermelidir."}), 400
-
-        # Yeni şifreyi hash'le
+            return jsonify({"message": "Yeni şifre gereksinimleri karşılamıyor."}), 400
+        
+        # Yeni şifreyi hashle ve veritabanında güncelle
         hashed_new_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-
-        # Veritabanında kullanıcıyı güncelledik
-        cursor.execute("UPDATE kullanici SET sifre = %s WHERE isim = %s", (hashed_new_password, username))
+        update_query = "UPDATE kullanici SET sifre = %s WHERE email = %s"
+        cursor.execute(update_query, (hashed_new_password, email))
         connection.commit()
         
-        # Başarılı mesajını gösterdik
-        return jsonify({"message": "Şifre başarıyla değiştirildi.", "sifre": new_password}), 200
-
+        return redirect(url_for('index'))
     except Exception as e:
-        # Hata durumunda yanıt gönderdik
-        return jsonify({"message": "Şifre değiştirme sırasında bir hata oluştu."}), 500
-
-    
-    
-
+        return jsonify({"message": "Şifre değiştirilirken bir hata oluştu: " + str(e)}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
 
 @app.route('/get_data', methods=['GET'])
 def get_data():

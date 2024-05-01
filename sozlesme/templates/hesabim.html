@@ -117,7 +117,7 @@
 						<p class="mb-30"></p>
 					</div>
 					<div class="wizard-content">
-						<form class="hesap wizard-circle wizard" action="{{ url_for('hesabim') }}" method="POST">
+						<form class="changePasswordForm wizard-circle wizard" action="/change-password" method="POST">
 							<h5></h5>
 							<section>
 								<div class="row">
@@ -137,11 +137,17 @@
 									</div>
 									
 								</div>
-                                <div class="column new-password-fields" style="display: none;">
+                                <div class="column new-password-fields" >
+									<div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="current_password">Mevcut Şifre:</label>
+                                            <input type="password" class="form-control" id="current_password" name="current_password" required>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="new_password">Yeni Şifre:</label>
-                                            <input type="password" class="form-control" id="new_password" required>
+                                            <input type="password" class="form-control" id="new_password" name="new_password" required>
                                         </div>
                                     </div>
                                 
@@ -149,31 +155,18 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="confirm_password">Yeni Şifre Tekrar:</label>
-                                            <input type="password" class="form-control" id="confirm_password" required>
+                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <button type="button" class="btn btn-primary" id="sifreDegistir">Şifreyi Değiştir</button>
+                                        <button type="submit" class="btn btn-primary" id="sifreDegistir" name="sifreDegistir">Şifreyi Değiştir</button>
                                     </div>
                                 </div>
-                                <script>
-                                    $(document).ready(function(){
-                                        $("#toggle-password").click(function(){
-                                            var passwordField = $("#sifre");
-                                            var passwordFieldType = passwordField.attr('type');
-                                            if(passwordFieldType == 'password') {
-                                                passwordField.attr('type', 'text');
-                                                $("#toggle-password i").removeClass("fa-eye").addClass("fa-eye-slash");
-                                            } else {
-                                                passwordField.attr('type', 'password');
-                                                $("#toggle-password i").removeClass("fa-eye-slash").addClass("fa-eye");
-                                            }
-                                        });
-                                    });
-                                </script>
+                                
+                                
 							<!-- Step 2 -->
 							<h5></h5>
 							
@@ -196,8 +189,56 @@
     </div>
 
 </div>
-
-	<!-- js -->
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Form submit olayını dinle
+		document.getElementById('changePasswordForm').addEventListener('submit', function(event) {
+			// Sayfanın yeniden yüklenmesini engelle
+			event.preventDefault();
+			
+			// Display: none olan alanları göster
+			document.querySelectorAll('.new-password-fields').forEach(function(field) {
+				field.style.display = 'block';
+			});
+			
+			// Form verilerini al
+			var currentPassword = document.getElementById('current_password').value;
+			var newPassword = document.getElementById('new_password').value;
+			var confirmPassword = document.getElementById('confirm_password').value;
+			
+			// AJAX ile POST isteği gönder
+			var xhr = new XMLHttpRequest();
+			var url = '/change-password';
+			xhr.open('POST', url, true);
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					var response = JSON.parse(xhr.responseText);
+					// Yanıtı işle
+					if (xhr.status === 200) {
+						// Başarılı yanıt
+						alert(response.message);
+						// Şifre değiştirme formunu sıfırla
+						document.getElementById('changePasswordForm').reset();
+					} else {
+						// Hata durumu
+						alert(response.message);
+					}
+				}
+			};
+			
+			// POST verilerini oluştur
+			var params = '&current_password=' + encodeURIComponent(currentPassword) +
+						 '&new_password=' + encodeURIComponent(newPassword) +
+						 '&confirm_password=' + encodeURIComponent(confirmPassword);
+			
+			// İsteği gönder
+			xhr.send(params);
+		});
+	});
+	
+</script>
+		<!-- js -->
 	<script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></script>
 	<script  src="{{ url_for('static', filename='vendors/scripts/script.min.js') }}"></script>
 	<script  src="{{ url_for('static', filename='vendors/scripts/process.js') }}"></script>
