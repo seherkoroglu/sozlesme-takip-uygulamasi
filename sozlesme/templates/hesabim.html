@@ -126,24 +126,24 @@
 											<label for="isim" >Kullanıcı Adı ve Soyadı:</label>
 											<input type="text" class="form-control" id="isim" value="{{ session['username'] }}" readonly>
                                             <input type="text" class="form-control" id="soyisim" value="{{ session['soyisim'] }}" readonly>
+											<br>
+											<label for="email">E-mail :</label>
+											<input type="text" id="email" class="form-control"  value="{{ session['email'] }}" readonly>
+											<br>
+											<label for="current_password">Mevcut Şifre:</label>
+                                            <input type="password" class="form-control" id="current_password" name="current_password" required>
 										</div>
 									</div>
 									<div class="col-md-6">
-										<div class="form-group">
-											<label for="email">E-mail :</label>
-											<input type="text" id="email" class="form-control"  value="{{ session['email'] }}" readonly>
+										
+											<img src="images/logo/EMAAR.jpg" alt="img">
 											
-										</div>
+										
 									</div>
 									
 								</div>
                                 <div class="column new-password-fields" >
-									<div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="current_password">Mevcut Şifre:</label>
-                                            <input type="password" class="form-control" id="current_password" name="current_password" required>
-                                        </div>
-                                    </div>
+									
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="new_password">Yeni Şifre:</label>
