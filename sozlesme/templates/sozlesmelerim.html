@@ -20,6 +20,9 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/icon-font.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/styles/style.css') }}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+	
 
 	<style>
         table {
@@ -176,8 +179,9 @@
 				</form>
 				<br>
 				<button id="deleteButton" type="button" class="btn btn-danger">Seçimi Sil</button>
-				
-				
+				<br>
+				<br>
+				<button id="pdfbutton" type="button" class="btn btn-danger">PDF Oluştur</button>
 
 			</section>
 			<br>
@@ -208,13 +212,14 @@
 </div>
 
 
-
 	<!-- js -->
-	<script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></script>
+	<script  src="{{ url_for('static', filename='vendors/scripts/core.js') }}"></>
 	<script  src="{{ url_for('static', filename='vendors/scripts/script.min.js') }}"></script>
 	<script  src="{{ url_for('static', filename='vendors/scripts/process.js') }}"></script>
 	<script  src="{{ url_for('static', filename='vendors/scripts/layout-settings.js') }}"></script>
 	<script src="{{ url_for('static', filename='src/plugins/jquery-steps/jquery.steps.js') }}"></script>
 	<script src="{{ url_for('static', filename='vendors/scripts/steps-setting.js') }}"></script>
+	
+
 </body>
 </html>

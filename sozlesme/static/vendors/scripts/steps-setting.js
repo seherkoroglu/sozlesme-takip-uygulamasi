@@ -1,3 +1,4 @@
+
 // Formdaki tüm alanları kontrol eden bir işlev
 function validateForm() {
     var isValid = true;
@@ -96,49 +97,7 @@ function hesabiSil(event) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Form submit olayını dinle
-    document.getElementById('changePasswordForm').addEventListener('submit', function(event) {
-        // Sayfanın yeniden yüklenmesini engelle
-        event.preventDefault();
-        
-        // Form verilerini al
-        var currentPassword = document.getElementById('current_password').value;
-        var newPassword = document.getElementById('new_password').value;
-        var confirmPassword = document.getElementById('confirm_password').value;
-        document.querySelectorAll('.new-password-fields').forEach(function(field) {
-            field.style.display = 'block';
-        });
-        // AJAX ile POST isteği gönder
-        var xhr = new XMLHttpRequest();
-        var url = '/change-password';
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                var response = JSON.parse(xhr.responseText);
-                // Yanıtı işle
-                if (xhr.status === 200) {
-                    // Başarılı yanıt
-                    alert(response.message);
-                    // Şifre değiştirme formunu sıfırla
-                    document.getElementById('changePasswordForm').reset();
-                } else {
-                    // Hata durumu
-                    alert(response.message);
-                }
-            }
-        };
-        
-        // POST verilerini oluştur
-        var params = '&current_password=' + encodeURIComponent(currentPassword) +
-                     '&new_password=' + encodeURIComponent(newPassword) +
-                     '&confirm_password=' + encodeURIComponent(confirmPassword);
-        
-        // İsteği gönder
-        xhr.send(params);
-    });
-});
+
 
     
 
@@ -206,6 +165,7 @@ $(document).ready(function() {
         });
     }
 
+
     // Verileri al
     getData();
 
@@ -239,6 +199,56 @@ $(document).ready(function() {
             alert('Lütfen silmek istediğiniz sözleşmeleri seçin.');
         }
     });
+
+    // PDF oluşturma fonksiyonu
+function createPDF(data) {
+    var contracts = data.map(function(contract) {
+        var contractInfo = [
+            'Sözleşme ID: ' + contract.sozlesme_id,
+            'Firma Adı: ' + contract.firma_adi,
+            'Departman: ' + contract.departman_adi,
+            'Başlangıç Tarihi: ' + contract.baslangic_tarihi,
+            'Bitiş Tarihi: ' + contract.bitis_tarihi,
+            'Sözleşme Kodu: ' + contract.sozlesme_kodu,
+            'Sözleşme Başlığı: ' + contract.sozlesme_basligi,
+            'Sözleşme İçeriği: ' + contract.sozlesme_icerigi,
+            'İmza Yetkilisi: ' + contract.imza_yetkilisi,
+            'İlgili Firma: ' + contract.ilgili_firma_adi,
+            'Bilgilendirme Tipi: ' + contract.bilgilendirme_tipi,
+            'Bilgilendirme Tarihi: ' + contract.bilgilendirme_tarihi,
+            'Bilgilendirme Saati: ' + contract.bilgilendirme_saati,
+            'Bilgilendirme Amacı: ' + contract.bilgilendirme_amaci,
+
+            
+        ];
+        return contractInfo.join('<br>');
+    }).join('<br><br>');
+
+    var element = document.createElement('div');
+    element.innerHTML = contracts;
+
+    html2pdf()
+        .from(element)
+        .save('contracts.pdf');
+}
+
+
+$('#pdfbutton').on('click', function() {
+    $.ajax({
+        type: 'GET',
+        url: '/get_data',
+        success: function(response) {
+            createPDF(response);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            alert('Veri alınırken bir hata oluştu.');
+        }
+    });
+});
+
+
+
 });
 
 

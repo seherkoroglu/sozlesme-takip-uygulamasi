@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, flash, get_flashed_messages
 
 import mysql.connector
-from flask_mail import Mail, Message
 from datetime import datetime, timedelta
-import sendgrid
-from sendgrid.helpers.mail import Mail
 from time import sleep
 import bcrypt
 import re
